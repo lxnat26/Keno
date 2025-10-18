@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import java.util.HashMap;
 
 
 public class JavaFXTemplate extends Application {
@@ -24,7 +25,7 @@ public class JavaFXTemplate extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-		primaryStage.setTitle("Welcome to JavaFX");
+		primaryStage.setTitle("Keno");
 		
 		 Rectangle rect = new Rectangle (100, 40, 100, 100);
 	     rect.setArcHeight(50);
