@@ -17,8 +17,7 @@ import java.util.HashMap;
 
 
 public class JavaFXTemplate extends Application {
-    Button sceneChange;
-    Button changeSceneBack;
+    Button sceneChangeToGame, sceneChangeToMenu;
     HashMap<String, Scene> sceneMap;
 
 	public static void main(String[] args) {
@@ -32,17 +31,17 @@ public class JavaFXTemplate extends Application {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Keno");
 
-        sceneChange = new Button("Change Scene");
-        changeSceneBack = new Button("Change Scene Back");
+        sceneChangeToGame = new Button("Play");
+        sceneChangeToMenu = new Button("Back To Menu");
         sceneMap = new HashMap<String,Scene>();
 
-        sceneChange.setOnAction(e -> primaryStage.setScene(sceneMap.get("second")));
-        changeSceneBack.setOnAction(e -> primaryStage.setScene(sceneMap.get("first")));
+        sceneChangeToGame.setOnAction(e -> primaryStage.setScene(sceneMap.get("game")));
+        sceneChangeToMenu.setOnAction(e -> primaryStage.setScene(sceneMap.get("menu")));
 
-        sceneMap.put("first", createTestSceneOne());
-		sceneMap.put("second", createTestSceneTwo());
-        
-			primaryStage.setScene(sceneMap.get("first"));
+        sceneMap.put("menu", createTestSceneOne());
+		sceneMap.put("game", createTestSceneTwo());
+
+			primaryStage.setScene(sceneMap.get("menu"));
 			primaryStage.show();
 		
 				
@@ -55,7 +54,7 @@ public class JavaFXTemplate extends Application {
 
         VBox paneCenter = new VBox(10);
 
-        pane.setLeft(sceneChange);
+        pane.setLeft(sceneChangeToGame);
         pane.setStyle("-fx-background-color: lightPink;");
 
         return new Scene(pane, 700,700, Color.BLUE);
@@ -67,7 +66,7 @@ public class JavaFXTemplate extends Application {
 
         VBox paneCenter = new VBox(10);
 
-        pane.setLeft(changeSceneBack);
+        pane.setLeft(sceneChangeToMenu);
         pane.setStyle("-fx-background-color: lightBlue;");
         return new Scene(pane, 700,700, Color.VIOLET);
     }
