@@ -10,11 +10,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.scene.control.Button;
+import javafx.geometry.Insets;
 import javafx.util.Duration;
 import java.util.HashMap;
 
 
 public class JavaFXTemplate extends Application {
+    Button sceneChange;
+    Button changeSceneBack;
+    HashMap<String, Scene> sceneMap;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -26,38 +31,45 @@ public class JavaFXTemplate extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Keno");
-		
-		 Rectangle rect = new Rectangle (100, 40, 100, 100);
-	     rect.setArcHeight(50);
-	     rect.setArcWidth(50);
-	     rect.setFill(Color.VIOLET);
 
-	     RotateTransition rt = new RotateTransition(Duration.millis(5000), rect);
-	     rt.setByAngle(270);
-	     rt.setCycleCount(4);
-	     rt.setAutoReverse(true);
-	     SequentialTransition seqTransition = new SequentialTransition (
-	         new PauseTransition(Duration.millis(500)),
-	         rt
-	     );
-	     seqTransition.play();
-	     
-	     FadeTransition ft = new FadeTransition(Duration.millis(5000), rect);
-	     ft.setFromValue(1.0);
-	     ft.setToValue(0.3);
-	     ft.setCycleCount(4);
-	     ft.setAutoReverse(true);
+        sceneChange = new Button("Change Scene");
+        changeSceneBack = new Button("Change Scene Back");
+        sceneMap = new HashMap<String,Scene>();
 
-	     ft.play();
-	     BorderPane root = new BorderPane();
-	     root.setCenter(rect);
-	     
-	     Scene scene = new Scene(root, 700,700);
-			primaryStage.setScene(scene);
+        sceneChange.setOnAction(e -> primaryStage.setScene(sceneMap.get("second")));
+        changeSceneBack.setOnAction(e -> primaryStage.setScene(sceneMap.get("first")));
+
+        sceneMap.put("first", createTestSceneOne());
+		sceneMap.put("second", createTestSceneTwo());
+        
+			primaryStage.setScene(sceneMap.get("first"));
 			primaryStage.show();
 		
 				
 		
 	}
+
+    public Scene createTestSceneOne(){
+        BorderPane pane = new BorderPane();
+        pane.setPadding(new Insets(70));
+
+        VBox paneCenter = new VBox(10);
+
+        pane.setLeft(sceneChange);
+        pane.setStyle("-fx-background-color: lightPink;");
+
+        return new Scene(pane, 700,700, Color.BLUE);
+    }
+
+    public Scene createTestSceneTwo(){
+        BorderPane pane = new BorderPane();
+        pane.setPadding(new Insets(70));
+
+        VBox paneCenter = new VBox(10);
+
+        pane.setLeft(changeSceneBack);
+        pane.setStyle("-fx-background-color: lightBlue;");
+        return new Scene(pane, 700,700, Color.VIOLET);
+    }
 
 }
