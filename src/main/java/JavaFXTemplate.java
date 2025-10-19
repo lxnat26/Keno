@@ -23,16 +23,22 @@ public class JavaFXTemplate extends Application {
     HashMap<String, Scene> sceneMap;
     MenuBar menuBarWelcome, menuBarGame;
     Menu menuWelcome, menuGame;
+    Stage primaryStage;
+    ThemeManager themeManager;
+    GameLogic gameLogic;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		launch(args);
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		// TODO Auto-generated method stub
-		primaryStage.setTitle("Keno");
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
+        primaryStage.setTitle("Keno");
+
+        // Initialize theme manager and game logic
+        themeManager = new ThemeManager();
+        gameLogic = new GameLogic();
 
         //Creating Menu Bars for Welcome & Game Scene
         menuWelcome = new Menu("Menu");
@@ -42,14 +48,26 @@ public class JavaFXTemplate extends Application {
 
         //Menu Items for Welcome Scene
         MenuItem mW1 = new MenuItem("Rules");
+        mW1.setOnAction(e -> showRules());
+
         MenuItem mW2 = new MenuItem("Odds");
+        mW2.setOnAction(e -> showOdds());
+
         MenuItem mW3 = new MenuItem("Exit");
+        mW3.setOnAction(e -> exitGame());
 
         //Menu Items for Game Scene
         MenuItem mG1 = new MenuItem("Rules");
+        mG1.setOnAction(e -> showRules());
+
         MenuItem mG2 = new MenuItem("Odds");
+        mG2.setOnAction(e -> showOdds());
+
         MenuItem mG3 = new MenuItem("Themes");
+        mG3.setOnAction(e -> toggleTheme());
+
         MenuItem mG4 = new MenuItem("Exit");
+        mG4.setOnAction(e -> exitGame());
 
         //Setting Up Menu Bars for Welcome & Game Scene
         menuWelcome.getItems().addAll(mW1, mW2, mW3);
@@ -65,39 +83,69 @@ public class JavaFXTemplate extends Application {
         sceneChangeToMenu.setOnAction(e -> primaryStage.setScene(sceneMap.get("menu")));
 
         sceneMap.put("menu", createMenuScene());
-		sceneMap.put("game", createGameScene());
+        sceneMap.put("game", createGameScene());
 
         primaryStage.setScene(sceneMap.get("menu"));
         primaryStage.show();
-		
-				
-		
-	}
+    }
 
     public Scene createMenuScene(){
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(70));
+        pane.setPrefSize(700, 700);
 
         VBox paneCenter = new VBox(10);
 
         pane.setLeft(sceneChangeToGame);
         pane.setTop(menuBarWelcome);
-        pane.setStyle("-fx-background-color: lightPink;");
 
-        return new Scene(pane, 700,700);
+        Scene scene = new Scene(pane, 700, 700);
+        themeManager.applyToScene(scene);
+        return scene;
     }
 
     public Scene createGameScene(){
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(70));
+        pane.setPrefSize(700, 700);
 
         VBox paneCenter = new VBox(10);
 
         pane.setLeft(sceneChangeToMenu);
         pane.setTop(menuBarGame);
 
-        pane.setStyle("-fx-background-color: lightBlue;");
-        return new Scene(pane, 700,700);
+        Scene scene = new Scene(pane, 700, 700);
+        themeManager.applyToScene(scene);
+        return scene;
     }
 
+    public void showRules() {
+        RulesPopup popup = new RulesPopup();
+        popup.show();
+    }
+
+    public void showOdds() {
+        OddsPopup popup = new OddsPopup();
+        popup.show();
+    }
+
+    public void toggleTheme() {
+        themeManager.toggleTheme();
+
+        // Apply theme to BOTH scenes
+        themeManager.applyToScene(sceneMap.get("menu"));
+        themeManager.applyToScene(sceneMap.get("game"));
+    }
+
+    public void exitGame() {
+        primaryStage.close();
+    }
+
+    public ThemeManager getThemeManager() {
+        return themeManager;
+    }
+
+    public GameLogic getGameLogic() {
+        return gameLogic;
+    }
 }

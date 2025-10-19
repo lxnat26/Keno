@@ -39,6 +39,7 @@ public class OddsPopup implements Popup {
         alert.setTitle(getTitle());
         alert.setHeaderText(null);
         alert.setContentText(getContent());
+        alert.getDialogPane().setPrefSize(400, 300);
         alert.showAndWait();
     }
 }
