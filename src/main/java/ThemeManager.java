@@ -13,18 +13,19 @@ public class ThemeManager {
     private void initializeThemes() {
         themes = new HashMap<>();
 
-        // Each theme: [backgroundColor, accentColor, backgroundImage]
+        // In ThemeManager.java
         themes.put("bunny", new String[]{
-                "#FFE4E1",  // Light pink background
-                "#FF69B4",  // Hot pink accent
-                "bunny.png" // Background image (optional)
+                "lightPink",     // Changed to match your original
+                "#FF69B4",
+                "bunny.png"
         });
 
         themes.put("cat", new String[]{
-                "#E0F7FA",  // Light blue background
-                "#00ACC1",  // Cyan accent
-                "cat.png"   // Background image (optional)
+                "lightBlue",     // Changed to match your original
+                "#00ACC1",
+                "cat.png"
         });
+
     }
 
     public void toggleTheme() {
