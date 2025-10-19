@@ -26,6 +26,7 @@ public class JavaFXTemplate extends Application {
     Stage primaryStage;
     ThemeManager themeManager;
     GameLogic gameLogic;
+    String css = getClass().getResource("/styles/Styles.css").toExternalForm();
 
     public static void main(String[] args) {
         launch(args);
@@ -84,13 +85,14 @@ public class JavaFXTemplate extends Application {
         sceneChangeToGame = new Button("₍^. .^₎Ⳋ Play");
         sceneChangeToGame.setPrefWidth(180);
         sceneChangeToGame.setPrefHeight(60);
-        sceneChangeToGame.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
-                + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
+        //sceneChangeToGame.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
+               // + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
 
         // Back To Menu Button
         sceneChangeToMenu = new Button("Back To Menu");
         sceneChangeToMenu.setPrefWidth(180);
         sceneChangeToMenu.setPrefHeight(60);
+        sceneChangeToGame.getStyleClass().add("play-button");
         sceneChangeToMenu.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
                 + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
 
@@ -114,6 +116,7 @@ public class JavaFXTemplate extends Application {
         pane.setCenter(sceneChangeToGame);
 
         Scene scene = new Scene(pane, 700, 700);
+        scene.getStylesheets().add(css);
         themeManager.applyToScene(scene);
         return scene;
     }

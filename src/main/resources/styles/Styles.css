@@ -1,0 +1,7 @@
+.play-button{
+    -fx-background-radius: 50px;
+    -fx-border-radius: 50px;
+    -fx-font-size: 20px;
+    -fx-text-fill: #6750A4;
+    -fx-font-weight: bold;
+}
