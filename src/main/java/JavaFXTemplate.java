@@ -16,7 +16,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.util.Duration;
 import java.util.HashMap;
-
+import java.util.Objects;
 
 public class JavaFXTemplate extends Application {
     Button sceneChangeToGame, sceneChangeToMenu;
@@ -41,10 +41,15 @@ public class JavaFXTemplate extends Application {
         gameLogic = new GameLogic();
 
         //Creating Menu Bars for Welcome & Game Scene
-        menuWelcome = new Menu("Menu");
-        menuGame = new Menu("Menu");
+        menuWelcome = new Menu("✪ Menu");
+        menuGame = new Menu("✪ Menu");
         menuBarWelcome = new MenuBar();
         menuBarGame = new MenuBar();
+
+        // Setting Style for Welcome & Game Menu
+        menuWelcome.setStyle("-fx-font-size: 14px;");
+        menuGame.setStyle("-fx-font-size: 14px;");
+
 
         //Menu Items for Welcome Scene
         MenuItem mW1 = new MenuItem("Rules");
@@ -75,8 +80,20 @@ public class JavaFXTemplate extends Application {
         menuGame.getItems().addAll(mG1, mG2, mG3, mG4);
         menuBarGame.getMenus().addAll(menuGame);
 
-        sceneChangeToGame = new Button("Play");
+        // Play Button
+        sceneChangeToGame = new Button("₍^. .^₎Ⳋ Play");
+        sceneChangeToGame.setPrefWidth(180);
+        sceneChangeToGame.setPrefHeight(60);
+        sceneChangeToGame.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
+                + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
+
+        // Back To Menu Button
         sceneChangeToMenu = new Button("Back To Menu");
+        sceneChangeToMenu.setPrefWidth(180);
+        sceneChangeToMenu.setPrefHeight(60);
+        sceneChangeToMenu.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
+                + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
+
         sceneMap = new HashMap<String,Scene>();
 
         sceneChangeToGame.setOnAction(e -> primaryStage.setScene(sceneMap.get("game")));
@@ -91,13 +108,10 @@ public class JavaFXTemplate extends Application {
 
     public Scene createMenuScene(){
         BorderPane pane = new BorderPane();
-        pane.setPadding(new Insets(70));
         pane.setPrefSize(700, 700);
 
-        VBox paneCenter = new VBox(10);
-
-        pane.setLeft(sceneChangeToGame);
         pane.setTop(menuBarWelcome);
+        pane.setCenter(sceneChangeToGame);
 
         Scene scene = new Scene(pane, 700, 700);
         themeManager.applyToScene(scene);
@@ -106,13 +120,10 @@ public class JavaFXTemplate extends Application {
 
     public Scene createGameScene(){
         BorderPane pane = new BorderPane();
-        pane.setPadding(new Insets(70));
         pane.setPrefSize(700, 700);
 
-        VBox paneCenter = new VBox(10);
-
-        pane.setLeft(sceneChangeToMenu);
         pane.setTop(menuBarGame);
+        pane.setCenter(sceneChangeToMenu);
 
         Scene scene = new Scene(pane, 700, 700);
         themeManager.applyToScene(scene);
