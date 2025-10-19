@@ -5,12 +5,20 @@ public class RulesPopup implements Popup {
 
     @Override
     public String getTitle() {
-        return "Rules";
+        return "Keno Rules";
     }
 
     @Override
     public String getContent() {
-        return "How to play Keno:";
+        return "HOW TO PLAY KENO:\n\n" +
+                "1. Select number of spots (1, 4, 8, or 10)\n" +
+                "2. Pick your numbers from 1-80\n" +
+                "   - OR use Random Pick button\n" +
+                "3. Choose number of drawings (1-4)\n" +
+                "4. Watch 20 numbers get drawn\n" +
+                "5. Match your numbers to win!\n\n" +
+                "The more numbers you match, the more you win!\n" +
+                "Check 'Odds' for payout table.";
     }
 
     @Override
