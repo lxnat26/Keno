@@ -5,6 +5,7 @@ import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -26,7 +27,6 @@ public class JavaFXTemplate extends Application {
     Stage primaryStage;
     ThemeManager themeManager;
     GameLogic gameLogic;
-    String css = getClass().getResource("/styles/Styles.css").toExternalForm();
 
     public static void main(String[] args) {
         launch(args);
@@ -85,8 +85,8 @@ public class JavaFXTemplate extends Application {
         sceneChangeToGame = new Button("₍^. .^₎Ⳋ Play");
         sceneChangeToGame.setPrefWidth(180);
         sceneChangeToGame.setPrefHeight(60);
-        //sceneChangeToGame.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
-               // + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
+        sceneChangeToGame.setStyle("-fx-background-radius: 50px; -fx-border-radius: 50px; -fx-font-size: 20px; " +
+                "-fx-text-fill: #6750A4; -fx-font-weight: bold;");
 
         // Back To Menu Button
         sceneChangeToMenu = new Button("Back To Menu");
@@ -112,11 +112,19 @@ public class JavaFXTemplate extends Application {
         BorderPane pane = new BorderPane();
         pane.setPrefSize(700, 700);
 
+        VBox centerBox = new VBox(20);
+        centerBox.setPadding(new Insets(10));
+        centerBox.setStyle("-fx-alignment:center;");
+
+        Label titleKeno = new Label("Keno");
+        titleKeno.setStyle("-fx-font-size: 80px; -fx-text-fill: #6750A4; -fx-font-weight:bold;");
+
+        centerBox.getChildren().addAll(titleKeno, sceneChangeToGame);
+
         pane.setTop(menuBarWelcome);
-        pane.setCenter(sceneChangeToGame);
+        pane.setCenter(centerBox);
 
         Scene scene = new Scene(pane, 700, 700);
-        scene.getStylesheets().add(css);
         themeManager.applyToScene(scene);
         return scene;
     }
