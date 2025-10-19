@@ -21,29 +21,41 @@ import java.util.HashMap;
 public class JavaFXTemplate extends Application {
     Button sceneChangeToGame, sceneChangeToMenu;
     HashMap<String, Scene> sceneMap;
-    MenuBar mb;
-    Menu m;
+    MenuBar menuBarWelcome, menuBarGame;
+    Menu menuWelcome, menuGame;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		launch(args);
 	}
 
-	//feel free to remove the starter code from this method
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Keno");
 
-        m = new Menu("Menu");
+        //Creating Menu Bars for Welcome & Game Scene
+        menuWelcome = new Menu("Menu");
+        menuGame = new Menu("Menu");
+        menuBarWelcome = new MenuBar();
+        menuBarGame = new MenuBar();
 
-        MenuItem m1 = new MenuItem("Rules");
-        MenuItem m2 = new MenuItem("Odds");
-        MenuItem m3 = new MenuItem("Exit");
+        //Menu Items for Welcome Scene
+        MenuItem mW1 = new MenuItem("Rules");
+        MenuItem mW2 = new MenuItem("Odds");
+        MenuItem mW3 = new MenuItem("Exit");
 
-        m.getItems().addAll(m1, m2, m3);
-        mb = new MenuBar();
-        mb.getMenus().addAll(m);
+        //Menu Items for Game Scene
+        MenuItem mG1 = new MenuItem("Rules");
+        MenuItem mG2 = new MenuItem("Odds");
+        MenuItem mG3 = new MenuItem("Themes");
+        MenuItem mG4 = new MenuItem("Exit");
+
+        //Setting Up Menu Bars for Welcome & Game Scene
+        menuWelcome.getItems().addAll(mW1, mW2, mW3);
+        menuBarWelcome.getMenus().addAll(menuWelcome);
+        menuGame.getItems().addAll(mG1, mG2, mG3, mG4);
+        menuBarGame.getMenus().addAll(menuGame);
 
         sceneChangeToGame = new Button("Play");
         sceneChangeToMenu = new Button("Back To Menu");
@@ -69,7 +81,7 @@ public class JavaFXTemplate extends Application {
         VBox paneCenter = new VBox(10);
 
         pane.setLeft(sceneChangeToGame);
-        pane.setTop(mb);
+        pane.setTop(menuBarWelcome);
         pane.setStyle("-fx-background-color: lightPink;");
 
         return new Scene(pane, 700,700);
@@ -82,7 +94,7 @@ public class JavaFXTemplate extends Application {
         VBox paneCenter = new VBox(10);
 
         pane.setLeft(sceneChangeToMenu);
-        pane.setTop(mb);
+        pane.setTop(menuBarGame);
 
         pane.setStyle("-fx-background-color: lightBlue;");
         return new Scene(pane, 700,700);
