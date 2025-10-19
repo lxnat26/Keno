@@ -11,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+import javafx.scene.control.*;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.util.Duration;
 import java.util.HashMap;
@@ -19,6 +21,8 @@ import java.util.HashMap;
 public class JavaFXTemplate extends Application {
     Button sceneChangeToGame, sceneChangeToMenu;
     HashMap<String, Scene> sceneMap;
+    MenuBar mb;
+    Menu m;
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -31,6 +35,16 @@ public class JavaFXTemplate extends Application {
 		// TODO Auto-generated method stub
 		primaryStage.setTitle("Keno");
 
+        m = new Menu("Menu");
+
+        MenuItem m1 = new MenuItem("Rules");
+        MenuItem m2 = new MenuItem("Odds");
+        MenuItem m3 = new MenuItem("Exit");
+
+        m.getItems().addAll(m1, m2, m3);
+        mb = new MenuBar();
+        mb.getMenus().addAll(m);
+
         sceneChangeToGame = new Button("Play");
         sceneChangeToMenu = new Button("Back To Menu");
         sceneMap = new HashMap<String,Scene>();
@@ -38,37 +52,40 @@ public class JavaFXTemplate extends Application {
         sceneChangeToGame.setOnAction(e -> primaryStage.setScene(sceneMap.get("game")));
         sceneChangeToMenu.setOnAction(e -> primaryStage.setScene(sceneMap.get("menu")));
 
-        sceneMap.put("menu", createTestSceneOne());
-		sceneMap.put("game", createTestSceneTwo());
+        sceneMap.put("menu", createMenuScene());
+		sceneMap.put("game", createGameScene());
 
-			primaryStage.setScene(sceneMap.get("menu"));
-			primaryStage.show();
+        primaryStage.setScene(sceneMap.get("menu"));
+        primaryStage.show();
 		
 				
 		
 	}
 
-    public Scene createTestSceneOne(){
+    public Scene createMenuScene(){
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(70));
 
         VBox paneCenter = new VBox(10);
 
         pane.setLeft(sceneChangeToGame);
+        pane.setTop(mb);
         pane.setStyle("-fx-background-color: lightPink;");
 
-        return new Scene(pane, 700,700, Color.BLUE);
+        return new Scene(pane, 700,700);
     }
 
-    public Scene createTestSceneTwo(){
+    public Scene createGameScene(){
         BorderPane pane = new BorderPane();
         pane.setPadding(new Insets(70));
 
         VBox paneCenter = new VBox(10);
 
         pane.setLeft(sceneChangeToMenu);
+        pane.setTop(mb);
+
         pane.setStyle("-fx-background-color: lightBlue;");
-        return new Scene(pane, 700,700, Color.VIOLET);
+        return new Scene(pane, 700,700);
     }
 
 }
