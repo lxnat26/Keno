@@ -63,8 +63,8 @@ public class ThemeManager {
         Image pic = new Image(getClass().getResource(imagePath).toExternalForm());
         ImageView v = new ImageView(pic);
 
-        v.setFitHeight(510);
-        v.setFitWidth(700);
+        v.setFitHeight(540);
+        v.setFitWidth(740);
 
         return v;
     }

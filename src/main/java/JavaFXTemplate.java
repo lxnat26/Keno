@@ -116,7 +116,6 @@ public class JavaFXTemplate extends Application {
 
         //Adds padding and centerBox
         VBox centerBox = new VBox(20);
-        VBox.setMargin(sceneChangeToGame, new Insets(200, 0, 0, 0)); // Top margin only
         centerBox.setPadding(new Insets(10));
         centerBox.setStyle("-fx-alignment:center;");
 
@@ -129,6 +128,7 @@ public class JavaFXTemplate extends Application {
 
         sceneChangeToGame.setGraphic(buttonImageView);
         sceneChangeToGame.setStyle("-fx-background-color: transparent;");
+        VBox.setMargin(sceneChangeToGame, new Insets(250, 0, 0, 0));
 
         centerBox.getChildren().addAll(sceneChangeToGame);
 
