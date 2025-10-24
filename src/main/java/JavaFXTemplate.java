@@ -159,9 +159,23 @@ public class JavaFXTemplate extends Application {
     public void toggleTheme() {
         themeManager.toggleTheme();
 
+        // Rebuilding menu and game scene with new image
+        sceneMap.put("menu", createMenuScene());
+        sceneMap.put("game", createGameScene());
+
+        Scene current = primaryStage.getScene();
+
+        if(current == sceneMap.get("menu")){
+            primaryStage.setScene(sceneMap.get("menu"));
+        }
+        else{
+            primaryStage.setScene(sceneMap.get("game"));
+        }
         // Apply theme to BOTH scenes
-        themeManager.applyToScene(sceneMap.get("menu"));
-        themeManager.applyToScene(sceneMap.get("game"));
+        // I WILL UNCOMMENT FOR NOW BUT TALK WITH LENA LATER BOUT THIS
+        //themeManager.applyToScene(sceneMap.get("menu"));
+        //themeManager.applyToScene(sceneMap.get("game"));
+
     }
 
     public void exitGame() {

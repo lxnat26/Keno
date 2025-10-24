@@ -17,9 +17,9 @@ public class ThemeManager {
 
         // In ThemeManager.java
         themes.put("bunny", new String[]{
-                "lightPink",     // Changed to match your original
+                "#9BCCB6",     // Changed to match your original
                 "#FF69B4",
-                "catKeno.PNG"
+                "bunnyKeno.PNG"
         });
 
         themes.put("cat", new String[]{
