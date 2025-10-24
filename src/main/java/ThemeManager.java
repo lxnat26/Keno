@@ -1,5 +1,7 @@
 import javafx.scene.Scene;
 import java.util.HashMap;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class ThemeManager {
     private String currentTheme;
@@ -17,13 +19,13 @@ public class ThemeManager {
         themes.put("bunny", new String[]{
                 "lightPink",     // Changed to match your original
                 "#FF69B4",
-                "bunny.png"
+                "catKeno.PNG"
         });
 
         themes.put("cat", new String[]{
-                "lightBlue",     // Changed to match your original
+                "#2A638D",     // Changed to match your original
                 "#00ACC1",
-                "cat.png"
+                "catKeno.PNG"
         });
 
     }
@@ -48,8 +50,19 @@ public class ThemeManager {
         return themes.get(currentTheme)[1];
     }
 
-    public String getBackgroundImage() {
-        return themes.get(currentTheme)[2];
+    public String getBackgroundImage() {return themes.get(currentTheme)[2];}
+
+    public ImageView getBackgroundImageView(){
+        String imageFile = getBackgroundImage();
+        String imagePath ="/images/" + imageFile;
+
+        Image image = new Image(getClass().getResource(imagePath).toExternalForm());
+        ImageView imageView = new ImageView(image);
+
+        imageView.setFitHeight(510);
+        imageView.setFitWidth(700);
+
+        return imageView;
     }
 
     public void applyToScene(Scene scene) {

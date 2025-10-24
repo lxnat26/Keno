@@ -18,6 +18,8 @@ import javafx.geometry.Insets;
 import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Objects;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 public class JavaFXTemplate extends Application {
     Button sceneChangeToGame, sceneChangeToMenu;
@@ -92,7 +94,6 @@ public class JavaFXTemplate extends Application {
         sceneChangeToMenu = new Button("Back To Menu");
         sceneChangeToMenu.setPrefWidth(180);
         sceneChangeToMenu.setPrefHeight(60);
-        sceneChangeToGame.getStyleClass().add("play-button");
         sceneChangeToMenu.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
                 + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
 
@@ -109,14 +110,17 @@ public class JavaFXTemplate extends Application {
     }
 
     public Scene createMenuScene(){
+        ImageView bgImage = themeManager.getBackgroundImageView();
+
         BorderPane pane = new BorderPane();
         pane.setPrefSize(700, 700);
 
         VBox centerBox = new VBox(20);
+        VBox.setMargin(sceneChangeToGame, new Insets(200, 0, 0, 0)); // Top margin only
         centerBox.setPadding(new Insets(10));
         centerBox.setStyle("-fx-alignment:center;");
 
-        Label titleKeno = new Label("Keno");
+        Label titleKeno = new Label(""); // NOTE TAKE OUT OR CHANGE LATER BUT FIX THIS PLSSSS
         titleKeno.setStyle("-fx-font-size: 80px; -fx-text-fill: #6750A4; -fx-font-weight:bold;");
 
         centerBox.getChildren().addAll(titleKeno, sceneChangeToGame);
@@ -124,7 +128,8 @@ public class JavaFXTemplate extends Application {
         pane.setTop(menuBarWelcome);
         pane.setCenter(centerBox);
 
-        Scene scene = new Scene(pane, 700, 700);
+        StackPane root = new StackPane(bgImage, pane);
+        Scene scene = new Scene(root, 700, 700);
         themeManager.applyToScene(scene);
         return scene;
     }
