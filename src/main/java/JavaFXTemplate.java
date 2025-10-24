@@ -18,8 +18,9 @@ import javafx.geometry.Insets;
 import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Objects;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class JavaFXTemplate extends Application {
     Button sceneChangeToGame, sceneChangeToMenu;
@@ -84,11 +85,7 @@ public class JavaFXTemplate extends Application {
         menuBarGame.getMenus().addAll(menuGame);
 
         // Play Button
-        sceneChangeToGame = new Button("₍^. .^₎Ⳋ Play");
-        sceneChangeToGame.setPrefWidth(180);
-        sceneChangeToGame.setPrefHeight(60);
-        sceneChangeToGame.setStyle("-fx-background-radius: 50px; -fx-border-radius: 50px; -fx-font-size: 20px; " +
-                "-fx-text-fill: #6750A4; -fx-font-weight: bold;");
+        sceneChangeToGame = new Button();
 
         // Back To Menu Button
         sceneChangeToMenu = new Button("Back To Menu");
@@ -110,20 +107,30 @@ public class JavaFXTemplate extends Application {
     }
 
     public Scene createMenuScene(){
+        //Sets up Title
         ImageView bgImage = themeManager.getBackgroundImageView();
 
+        //Sets up BorderPane
         BorderPane pane = new BorderPane();
         pane.setPrefSize(700, 700);
 
+        //Adds padding and centerBox
         VBox centerBox = new VBox(20);
         VBox.setMargin(sceneChangeToGame, new Insets(200, 0, 0, 0)); // Top margin only
         centerBox.setPadding(new Insets(10));
         centerBox.setStyle("-fx-alignment:center;");
 
-        Label titleKeno = new Label(""); // NOTE TAKE OUT OR CHANGE LATER BUT FIX THIS PLSSSS
-        titleKeno.setStyle("-fx-font-size: 80px; -fx-text-fill: #6750A4; -fx-font-weight:bold;");
+        String buttonImagePath = "/images/" + themeManager.getButtonImage();
+        Image buttonImage = new Image(getClass().getResource(buttonImagePath).toExternalForm());
+        ImageView buttonImageView = new ImageView(buttonImage);
 
-        centerBox.getChildren().addAll(titleKeno, sceneChangeToGame);
+        buttonImageView.setFitWidth(180);
+        buttonImageView.setFitHeight(60);
+
+        sceneChangeToGame.setGraphic(buttonImageView);
+        sceneChangeToGame.setStyle("-fx-background-color: transparent;");
+
+        centerBox.getChildren().addAll(sceneChangeToGame);
 
         pane.setTop(menuBarWelcome);
         pane.setCenter(centerBox);

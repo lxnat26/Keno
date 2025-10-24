@@ -19,13 +19,15 @@ public class ThemeManager {
         themes.put("bunny", new String[]{
                 "#9BCCB6",     // Changed to match your original
                 "#FF69B4",
-                "bunnyKeno.PNG"
+                "bunnyKeno.PNG",
+                "PinkButton.PNG"
         });
 
         themes.put("cat", new String[]{
                 "#2A638D",     // Changed to match your original
                 "#00ACC1",
-                "catKeno.PNG"
+                "catKeno.PNG",
+                "OrangeButton.PNG"
         });
 
     }
@@ -52,17 +54,19 @@ public class ThemeManager {
 
     public String getBackgroundImage() {return themes.get(currentTheme)[2];}
 
+    public String getButtonImage(){return themes.get(currentTheme)[3];}
+
     public ImageView getBackgroundImageView(){
         String imageFile = getBackgroundImage();
         String imagePath ="/images/" + imageFile;
 
-        Image image = new Image(getClass().getResource(imagePath).toExternalForm());
-        ImageView imageView = new ImageView(image);
+        Image pic = new Image(getClass().getResource(imagePath).toExternalForm());
+        ImageView v = new ImageView(pic);
 
-        imageView.setFitHeight(510);
-        imageView.setFitWidth(700);
+        v.setFitHeight(510);
+        v.setFitWidth(700);
 
-        return imageView;
+        return v;
     }
 
     public void applyToScene(Scene scene) {
