@@ -1,4 +1,10 @@
 import javafx.application.Application;
+
+import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.SequentialTransition;
+
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.BorderPane;
@@ -9,17 +15,17 @@ import javafx.scene.control.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.util.Duration;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.EventObject;
-import java.util.ArrayList;
 import javafx.scene.layout.StackPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+
+import java.util.HashMap;
+import java.util.ArrayList;
+
 import javafx.event.ActionEvent;
 
 
