@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
+import javafx.util.Duration;
 
 /**
  * Main application class for a Keno game built with JavaFX.
@@ -103,8 +104,6 @@ public class JavaFXTemplate extends Application {
 
         // Initialize the size of the entire game window
         primaryStage.setResizable(false);
-        primaryStage.setWidth(1250);
-        primaryStage.setHeight(700);
 
         // Initialize theme manager and game logic
         themeManager = new ThemeManager();
@@ -154,9 +153,9 @@ public class JavaFXTemplate extends Application {
 
         // Back To Menu Button - returns to welcome screen
         sceneChangeToMenu = new Button("Back To Menu");
-        sceneChangeToMenu.setPrefWidth(180);
-        sceneChangeToMenu.setPrefHeight(60);
-        sceneChangeToMenu.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
+        sceneChangeToMenu.setPrefWidth(100);
+        sceneChangeToMenu.setPrefHeight(30);
+        sceneChangeToMenu.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 12px;"
                 + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
 
         // Initialize scene map to store all scenes
@@ -234,34 +233,6 @@ public class JavaFXTemplate extends Application {
          * 
          * @return Scene object representing the game screen
          */
-        // public Scene createGameScene(){
-        //     BorderPane pane = new BorderPane();
-        //     pane.setPrefSize(1250, 700);
-
-        //     pane.setTop(menuBarGame);
-
-        //     // Create the Keno number grid (1-80) - KEEP ORIGINAL LAYOUT
-        //     gameBoard = new GameBoard();
-        //     GridPane grid = gameBoard.createGameBoard(e -> {
-        //         Button btn = (Button) e.getSource();
-        //         gameLogic.handleButtonPress(btn);
-        //         checkIfReadyToStart();
-        //     }, themeManager);
-        //     pane.setLeft(grid);
-
-        //     // Create right side control panel
-        //     VBox rightPanel = createRightPanel();
-
-        //     // Container for back button and control panel - REDUCED GAP
-        //     VBox rightSide = new VBox(10); // Changed from 20 to 10
-        //     rightSide.setPadding(new Insets(10));
-        //     rightSide.getChildren().addAll(sceneChangeToMenu, rightPanel);
-        //     pane.setRight(rightSide);
-            
-        //     Scene scene = new Scene(pane, 1250, 700);
-        //     themeManager.applyToScene(scene);
-        //     return scene;
-        // }
         public Scene createGameScene(){
         BorderPane pane = new BorderPane();
         pane.setPrefSize(1250, 700);
@@ -770,7 +741,7 @@ public class JavaFXTemplate extends Application {
      */
     private void showGameOver() {
         GameOverPopup popup = new GameOverPopup(gameLogic.getTotalWinnings(), this);
-        popup.show();
+        popup.show(themeManager);
         
         // After popup, reset for new game
         resetGame();
