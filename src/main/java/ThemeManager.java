@@ -18,7 +18,6 @@ public class ThemeManager {
         // In ThemeManager.java
         themes.put("bunny", new String[]{
                 "#9BCCB6",     // Changed to match your original
-                "#FF69B4",
                 "bunnyKeno.PNG",
                 "PinkButton.PNG",
                 "Carrot.PNG"
@@ -26,7 +25,6 @@ public class ThemeManager {
 
         themes.put("cat", new String[]{
                 "#2A638D",     // Changed to match your original
-                "#00ACC1",
                 "catKeno.PNG",
                 "OrangeButton.PNG",
                 "Fish.PNG"
@@ -46,19 +44,13 @@ public class ThemeManager {
         return currentTheme;
     }
 
-    public String getBackgroundColor() {
-        return themes.get(currentTheme)[0];
-    }
+    public String getBackgroundColor() {return themes.get(currentTheme)[0];}
 
-    public String getAccentColor() {
-        return themes.get(currentTheme)[1];
-    }
+    public String getBackgroundImage() {return themes.get(currentTheme)[1];}
 
-    public String getBackgroundImage() {return themes.get(currentTheme)[2];}
+    public String getButtonImage(){return themes.get(currentTheme)[2];}
 
-    public String getButtonImage(){return themes.get(currentTheme)[3];}
-
-    public String getBoardImage(){return themes.get(currentTheme)[4];}
+    public String getBoardImage(){return themes.get(currentTheme)[3];}
 
     public ImageView getBackgroundImageView(){
         String imageFile = getBackgroundImage();
@@ -75,7 +67,6 @@ public class ThemeManager {
 
     public void applyToScene(Scene scene) {
         String bgColor = getBackgroundColor();
-        String accentColor = getAccentColor();
 
         scene.getRoot().setStyle(
                 "-fx-background-color: " + bgColor + ";"
