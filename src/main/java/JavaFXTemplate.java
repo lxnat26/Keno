@@ -50,8 +50,6 @@ public class JavaFXTemplate extends Application {
 
         // Initialize the size of the entire game window
         primaryStage.setResizable(false);
-        primaryStage.setWidth(1250);
-        primaryStage.setHeight(700);
 
         // Initialize theme manager and game logic
         themeManager = new ThemeManager();
@@ -102,9 +100,9 @@ public class JavaFXTemplate extends Application {
 
         // Back To Menu Button
         sceneChangeToMenu = new Button("Back To Menu");
-        sceneChangeToMenu.setPrefWidth(180);
-        sceneChangeToMenu.setPrefHeight(60);
-        sceneChangeToMenu.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 20px;"
+        sceneChangeToMenu.setPrefWidth(100);
+        sceneChangeToMenu.setPrefHeight(20);
+        sceneChangeToMenu.setStyle("-fx-background-radius: 50px;" + "-fx-border-radius: 50px;" + "-fx-font-size: 12;"
                 + "-fx-text-fill: #6750A4;" + "-fx-font-weight: bold;");
 
         sceneMap = new HashMap<String,Scene>();
@@ -124,37 +122,46 @@ public class JavaFXTemplate extends Application {
     }
 
     public Scene createMenuScene(){
-        //Sets up Title
+        // Sets up Title
         ImageView bgImage = themeManager.getBackgroundImageView();
 
-        //Sets up BorderPane
+        // Sets up BorderPane
         BorderPane pane = new BorderPane();
         pane.setPrefSize(1250, 700);
 
-        //Adds padding and centerBox
+        // Adds padding and centerBox
         VBox centerBox = new VBox(20);
         centerBox.setPadding(new Insets(10));
         centerBox.setStyle("-fx-alignment:center;");
 
+        // Sets up Play Button Image
         String buttonImagePath = "/images/" + themeManager.getButtonImage();
         Image buttonImage = new Image(getClass().getResource(buttonImagePath).toExternalForm());
         ImageView buttonImageView = new ImageView(buttonImage);
 
+        // Sizing of Play Button
         buttonImageView.setFitWidth(180);
         buttonImageView.setFitHeight(60);
 
+        // Style of Play Button
         sceneChangeToGame.setGraphic(buttonImageView);
         sceneChangeToGame.setStyle("-fx-background-color: transparent;");
-        VBox.setMargin(sceneChangeToGame, new Insets(250, 0, 0, 0));
 
+        // Layout of button
+        VBox.setMargin(sceneChangeToGame, new Insets(250, 0, 0, 0));
         centerBox.getChildren().addAll(sceneChangeToGame);
 
+        // Sets placement of menu and centerbox to BorderPane
         pane.setTop(menuBarWelcome);
         pane.setCenter(centerBox);
 
+        // Stacks the Welcome(BackgroundImage) to the BorderPane
         StackPane root = new StackPane(bgImage, pane);
+
+        // Creates the Scene
         Scene scene = new Scene(root, 1250, 700);
         themeManager.applyToScene(scene);
+
         return scene;
     }
 
@@ -189,7 +196,7 @@ public class JavaFXTemplate extends Application {
 
     private VBox createRightPanel() {
         VBox rightPanel = new VBox(20);
-        rightPanel.setPadding(new Insets(75, 50, 50, 50));
+        rightPanel.setPadding(new Insets(50, 175, 0, 50));
         rightPanel.setAlignment(Pos.TOP_CENTER);
 
         // Status label to guide the user
