@@ -345,29 +345,6 @@ public class JavaFXTemplate extends Application {
         }
     }
 
-    // private void checkIfReadyToStart() {
-    //     if (spotsComboBox.getValue() == null) {
-    //         return;
-    //     }
-        
-    //     int requiredSpots = spotsComboBox.getValue();
-    //     int selectedSpots = gameLogic.getPlayerNumbers().size();
-        
-    //     if (selectedSpots == requiredSpots) { // Player did pick enough spots, so need confirmation
-    //         statusLabel.setText("Ready! Click Confirm Selection.");
-    //         confirmSelectionButton.setDisable(false);
-    //         randomPickButton.setDisable(false);
-    //     } else if (selectedSpots < requiredSpots) { // Player did not pick enough spots yet
-    //         statusLabel.setText("Selected " + selectedSpots + "/" + requiredSpots + " numbers");
-    //         confirmSelectionButton.setDisable(true);
-    //         startDrawingButton.setDisable(true);
-    //     } else { // Player has selected too many spots
-    //         statusLabel.setText("Too many numbers selected!");
-    //         confirmSelectionButton.setDisable(true);
-    //         startDrawingButton.setDisable(true);
-    //     }
-    // }
-
     private void checkIfReadyToStart() {
         if (spotsComboBox.getValue() == null) {
             return;
