@@ -4,11 +4,6 @@ import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.SequentialTransition;
-
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -32,12 +27,12 @@ import javafx.scene.image.ImageView;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
-import javafx.util.Duration;
 
 /**
  * Main application class for a Keno game built with JavaFX.
