@@ -3,7 +3,6 @@ import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Application;
-
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -14,16 +13,22 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.*;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.EventObject;
+import java.util.ArrayList;
 import javafx.scene.layout.StackPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
+
 
 public class JavaFXTemplate extends Application {
     Button sceneChangeToGame, sceneChangeToMenu;
@@ -33,6 +38,13 @@ public class JavaFXTemplate extends Application {
     Stage primaryStage;
     ThemeManager themeManager;
     GameLogic gameLogic;
+    GameBoard gameBoard;
+    ComboBox<Integer> spotsComboBox;
+    ComboBox<Integer> drawingsComboBox;
+    Button randomPickButton;
+    Button startDrawingButton;
+    Label statusLabel;
+    Button confirmSelectionButton;
 
     public static void main(String[] args) {
         launch(args);
@@ -80,7 +92,7 @@ public class JavaFXTemplate extends Application {
         MenuItem mG2 = new MenuItem("Odds");
         mG2.setOnAction(e -> showOdds());
 
-        MenuItem mG3 = new MenuItem("Themes");
+        MenuItem mG3 = new MenuItem("Change Theme");
         mG3.setOnAction(e -> toggleTheme());
 
         MenuItem mG4 = new MenuItem("Exit");
@@ -158,15 +170,202 @@ public class JavaFXTemplate extends Application {
         pane.setPrefSize(1250, 700);
 
         pane.setTop(menuBarGame);
-        pane.setRight(sceneChangeToMenu);
+        // pane.setRight(sceneChangeToMenu);
 
-        GameBoard betCard = new GameBoard();
-        GridPane grid = betCard.createGameBoard(e -> gameLogic.handleButtonPress((Button) e.getSource()), themeManager);
+        gameBoard = new GameBoard();
+        GridPane grid = gameBoard.createGameBoard(e -> {
+            Button btn = (Button) e.getSource();
+            gameLogic.handleButtonPress(btn);
+            checkIfReadyToStart(); // Check if player has selected enough numbers
+        }, themeManager);
         pane.setLeft(grid);
 
+        // Create right side control panel
+        VBox rightPanel = createRightPanel();
+
+        VBox rightSide = new VBox(20);
+        rightSide.setPadding(new Insets(10));
+        rightSide.getChildren().addAll(sceneChangeToMenu, rightPanel);
+        pane.setRight(rightSide);
+        
         Scene scene = new Scene(pane, 1250, 700);
         themeManager.applyToScene(scene);
         return scene;
+    }
+
+    private VBox createRightPanel() {
+        VBox rightPanel = new VBox(20);
+        rightPanel.setPadding(new Insets(75, 50, 50, 50));
+        rightPanel.setAlignment(Pos.TOP_CENTER);
+
+        // Status label to guide the user
+        statusLabel = new Label("Select number of spots and drawings");
+        statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        statusLabel.setWrapText(true);
+        statusLabel.setMaxWidth(200);
+
+        // Spots selection
+        Label spotsLabel = new Label("Number of Spots:");
+        spotsLabel.setStyle("-fx-font-size: 14px;");
+        spotsComboBox = new ComboBox<>();
+        spotsComboBox.getItems().addAll(1, 4, 8, 10);
+        spotsComboBox.setPromptText("Choose spots...");
+        spotsComboBox.setPrefWidth(150);
+
+        // Drawings selection
+        Label drawingsLabel = new Label("Number of Drawings:");
+        drawingsLabel.setStyle("-fx-font-size: 14px;");
+        drawingsComboBox = new ComboBox<>();
+        drawingsComboBox.getItems().addAll(1, 2, 3, 4);
+        drawingsComboBox.setPromptText("Choose drawings...");
+        drawingsComboBox.setPrefWidth(150);
+
+        // Random pick button
+        randomPickButton = new Button("Random Pick");
+        randomPickButton.setPrefWidth(150);
+        randomPickButton.setPrefHeight(40);
+        randomPickButton.setStyle("-fx-font-size: 14px;");
+        randomPickButton.setDisable(true);
+
+        // Confirm selection button
+        confirmSelectionButton = new Button("Confirm Selection");
+        confirmSelectionButton.setPrefWidth(150);
+        confirmSelectionButton.setPrefHeight(40);
+        confirmSelectionButton.setStyle("-fx-font-size: 14px;");
+        confirmSelectionButton.setDisable(true);
+
+        // Start drawing button
+        startDrawingButton = new Button("Start Drawing");
+        startDrawingButton.setPrefWidth(150);
+        startDrawingButton.setPrefHeight(40);
+        startDrawingButton.setStyle("-fx-font-size: 14px;");
+        startDrawingButton.setDisable(true);
+
+        // Add event handlers
+        setupControlHandlers();
+
+        rightPanel.getChildren().addAll(
+            statusLabel,
+            new Separator(),
+            spotsLabel,
+            spotsComboBox,
+            drawingsLabel,
+            drawingsComboBox,
+            new Separator(),
+            randomPickButton,
+            confirmSelectionButton,
+            startDrawingButton
+        );
+
+        return rightPanel;
+    }
+
+    private void setupControlHandlers() {
+        // When spots are selected
+        spotsComboBox.setOnAction(e -> {
+            checkIfSettingsComplete();
+        });
+
+        // When drawings are selected
+        drawingsComboBox.setOnAction(e -> {
+            checkIfSettingsComplete();
+        });
+
+        // Random pick button
+        randomPickButton.setOnAction(e -> {
+            // First, clear any existing selections
+            gameLogic.getPlayerNumbers().clear();
+            
+            // Reset all button visuals
+            for (Button btn : gameBoard.getGridButtons()) {
+                StackPane graphic = (StackPane) btn.getGraphic();
+                graphic.setOpacity(1.0);
+            }
+            
+            int spots = spotsComboBox.getValue();
+            ArrayList<Integer> randomNumbers = gameLogic.generateRandomPicks(spots);
+            
+            // Visually select the random numbers on the grid
+            for (int number : randomNumbers) {
+                for (Button btn : gameBoard.getGridButtons()) {
+                    if ((int) btn.getUserData() == number) {
+                        StackPane graphic = (StackPane) btn.getGraphic();
+                        graphic.setOpacity(0.4);
+                        break;
+                    }
+                }
+            }
+            
+            // Set the numbers in game logic
+            gameLogic.setPlayerNumbers(randomNumbers);
+            
+            // Update status and enable confirm button (same as manual selection)
+            statusLabel.setText("Ready! Click Confirm Selection.");
+            confirmSelectionButton.setDisable(false);
+            // Do NOT enable Start Drawing yet - must confirm first
+        });
+
+        // Confirm selection button
+        confirmSelectionButton.setOnAction(e -> {
+            gameBoard.disableAllButtons();
+            statusLabel.setText("Numbers locked! Click Start Drawing.");
+            startDrawingButton.setDisable(false);
+            confirmSelectionButton.setDisable(true);
+        });
+
+        // Start drawing button - we'll implement this later
+        startDrawingButton.setOnAction(e -> {
+            statusLabel.setText("Drawing in progress...");
+            // TODO: Implement drawing logic
+        });
+    }
+
+    private void checkIfSettingsComplete() {
+        if (spotsComboBox.getValue() != null && drawingsComboBox.getValue() != null) {
+            int spots = spotsComboBox.getValue();
+            int drawings = drawingsComboBox.getValue();
+            
+            // Set game settings in logic
+            gameLogic.setGameSettings(spots, drawings);
+            
+            // Enable the grid buttons
+            gameBoard.enableAllButtons();
+            
+            // Enable random pick button
+            randomPickButton.setDisable(false);
+            
+            // Update status
+            statusLabel.setText("Select " + spots + " numbers on the bet card");
+            
+            // Disable the comboboxes so they can't be changed
+            spotsComboBox.setDisable(true);
+            drawingsComboBox.setDisable(true);
+        }
+    }
+
+    private void checkIfReadyToStart() {
+        if (spotsComboBox.getValue() == null) {
+            return;
+        }
+        
+        int requiredSpots = spotsComboBox.getValue();
+        int selectedSpots = gameLogic.getPlayerNumbers().size();
+        
+        if (selectedSpots == requiredSpots) {
+            statusLabel.setText("Ready! Click Confirm Selection.");
+            confirmSelectionButton.setDisable(false);  // Enable confirm button instead
+            randomPickButton.setDisable(false);
+            // DON'T disable buttons yet - let them change their mind
+            // DON'T enable start drawing yet
+        } else if (selectedSpots < requiredSpots) {
+            statusLabel.setText("Selected " + selectedSpots + "/" + requiredSpots + " numbers");
+            confirmSelectionButton.setDisable(true);
+            startDrawingButton.setDisable(true);
+        } else {
+            statusLabel.setText("Too many numbers selected!");
+            confirmSelectionButton.setDisable(true);
+            startDrawingButton.setDisable(true);
+        }
     }
 
     public void showRules() {
@@ -207,9 +406,5 @@ public class JavaFXTemplate extends Application {
 
     public ThemeManager getThemeManager() {
         return themeManager;
-    }
-
-    public GameLogic getGameLogic() {
-        return gameLogic;
     }
 }

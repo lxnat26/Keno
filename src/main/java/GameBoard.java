@@ -8,14 +8,18 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
+import java.util.ArrayList;
 
 public class GameBoard {
+    private ArrayList<Button> gridButtons = new ArrayList<>();
 
     public GridPane createGameBoard(EventHandler<ActionEvent> buttonHandler, ThemeManager themeManager) {
        // Sets up Grid for buttons
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(75));
         grid.setAlignment(Pos.CENTER_LEFT);
+        grid.setHgap(2); // Add horizontal gap between buttons
+        grid.setVgap(2); // Add vertical gap between buttons
 
         // Gets image for buttons
         String imagePath = "/images/" + themeManager.getBoardImage();
@@ -46,6 +50,10 @@ public class GameBoard {
                 space.setGraphic(p);
                 space.setPrefSize(60, 60);
                 space.setStyle("-fx-background-color: white;");
+                space.setDisable(true); // Disable initially
+                space.setUserData(num); // Store the number as user data
+                gridButtons.add(space); // Add to our list
+                space.setOnAction(buttonHandler); // Set the event handler
 
                 // Makes sure there is no space between the buttons
                 space.setPadding(Insets.EMPTY);
@@ -58,4 +66,26 @@ public class GameBoard {
         return grid;
     }
 
+    public void enableAllButtons() {
+        for (Button btn : gridButtons) {
+            btn.setDisable(false);
+        }
+    }
+
+    public void disableAllButtons() {
+        for (Button btn : gridButtons) {
+            btn.setDisable(true);
+        }
+    }
+
+    public void resetAllButtons() {
+        for (Button btn : gridButtons) {
+            btn.setStyle("-fx-background-color: white;");
+            btn.setDisable(true);
+        }
+    }
+
+    public ArrayList<Button> getGridButtons() {
+        return gridButtons;
+    }
 }

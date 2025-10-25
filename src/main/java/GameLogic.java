@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 
 public class GameLogic {
     private int numSpots;
@@ -83,17 +84,18 @@ public class GameLogic {
     }
 
     public boolean handleButtonPress(Button button) {
-        int number = Integer.parseInt(button.getText());
+        int number = (int) button.getUserData();
+        StackPane graphic = (StackPane) button.getGraphic();
 
         if (playerNumbers.contains(number)) {
             // Deselect
             playerNumbers.remove(Integer.valueOf(number));
-            button.setStyle(""); // Reset style
+            graphic.setOpacity(1.0); // Full opacity (100%)
             return false;
         } else if (playerNumbers.size() < numSpots) {
             // Select
             playerNumbers.add(number);
-            button.setStyle("-fx-background-color: gold; -fx-text-fill: black;");
+            graphic.setOpacity(0.4); // Reduced opacity (40% - more faded)
             return true;
         }
         return false;
@@ -131,5 +133,9 @@ public class GameLogic {
         drawnNumbers.clear();
         totalWinnings = 0;
         currentDrawingWinnings = 0;
+    }
+
+    public ArrayList<Integer> getPlayerNumbers() {
+        return playerNumbers;
     }
 }
