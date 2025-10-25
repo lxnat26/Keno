@@ -228,7 +228,7 @@ public class JavaFXTemplate extends Application {
         randomPickButton.setStyle("-fx-font-size: 14px;");
         randomPickButton.setDisable(true);
 
-        // Confirm selection button
+        // Confirm selection button - does double duty
         confirmSelectionButton = new Button("Confirm Selection");
         confirmSelectionButton.setPrefWidth(150);
         confirmSelectionButton.setPrefHeight(40);
@@ -245,7 +245,6 @@ public class JavaFXTemplate extends Application {
         // Add event handlers
         setupControlHandlers();
 
-        // Add all components to the panel
         rightPanel.getChildren().addAll(
             statusLabel,
             new Separator(),
@@ -263,12 +262,12 @@ public class JavaFXTemplate extends Application {
     }
 
     private void setupControlHandlers() {
-        // When spots are selected
+        // When spots combo changes - enable confirm if both selected
         spotsComboBox.setOnAction(e -> {
             checkIfSettingsComplete();
         });
 
-        // When drawings are selected
+        // When drawings combo changes - enable confirm if both selected
         drawingsComboBox.setOnAction(e -> {
             checkIfSettingsComplete();
         });
@@ -301,21 +300,53 @@ public class JavaFXTemplate extends Application {
             // Set the numbers in game logic
             gameLogic.setPlayerNumbers(randomNumbers);
             
-            // Update status and enable confirm button (same as manual selection)
+            // Update status and enable confirm button
             statusLabel.setText("Ready! Click Confirm Selection.");
             confirmSelectionButton.setDisable(false);
-            // Do NOT enable Start Drawing yet - must confirm first
         });
 
-        // Confirm selection button
+        // Confirm selection button - handles BOTH confirmations
         confirmSelectionButton.setOnAction(e -> {
-            gameBoard.disableAllButtons();
-            statusLabel.setText("Numbers locked! Click Start Drawing.");
-            startDrawingButton.setDisable(false);
-            confirmSelectionButton.setDisable(true);
+            // FIRST STAGE: If combo boxes are enabled, this confirms settings
+            if (!spotsComboBox.isDisabled()) {
+                int spots = spotsComboBox.getValue();
+                int drawings = drawingsComboBox.getValue();
+                
+                // Lock the settings in game logic
+                gameLogic.setGameSettings(spots, drawings);
+                
+                // Disable the combo boxes - user can't change these now
+                spotsComboBox.setDisable(true);
+                drawingsComboBox.setDisable(true);
+                
+                // Enable the game board for number selection
+                gameBoard.enableAllButtons();
+                
+                // Enable random pick button
+                randomPickButton.setDisable(false);
+                
+                // Disable confirm button until numbers are selected
+                confirmSelectionButton.setDisable(true);
+                
+                // Update status
+                statusLabel.setText("Select " + spots + " numbers on the bet card");
+            }
+            // SECOND STAGE: If combo boxes are disabled, this confirms number selection
+            else {
+                // Lock the number selections - disable board
+                gameBoard.disableAllButtons();
+                
+                // Disable random pick and confirm selection
+                randomPickButton.setDisable(true);
+                confirmSelectionButton.setDisable(true);
+                
+                // Enable start drawing
+                statusLabel.setText("Numbers locked! Click Start Drawing.");
+                startDrawingButton.setDisable(false);
+            }
         });
 
-        // Start drawing button - we'll implement this later
+        // Start drawing button
         startDrawingButton.setOnAction(e -> {
             statusLabel.setText("Drawing in progress...");
             // TODO: Implement drawing logic
@@ -324,24 +355,13 @@ public class JavaFXTemplate extends Application {
 
     private void checkIfSettingsComplete() {
         if (spotsComboBox.getValue() != null && drawingsComboBox.getValue() != null) {
-            int spots = spotsComboBox.getValue();
-            int drawings = drawingsComboBox.getValue();
+            // Enable confirm button to lock settings
+            confirmSelectionButton.setDisable(false);
+            statusLabel.setText("Click 'Confirm Selection' to lock your settings");
             
-            // Set game settings in logic
-            gameLogic.setGameSettings(spots, drawings);
-            
-            // Enable the grid buttons
-            gameBoard.enableAllButtons();
-            
-            // Enable random pick button
-            randomPickButton.setDisable(false);
-            
-            // Update status
-            statusLabel.setText("Select " + spots + " numbers on the bet card");
-            
-            // Disable the comboboxes so they can't be changed
-            spotsComboBox.setDisable(true);
-            drawingsComboBox.setDisable(true);
+            // Don't enable board or random pick yet - must confirm first
+            gameBoard.disableAllButtons();
+            randomPickButton.setDisable(true);
         }
     }
 
@@ -352,8 +372,6 @@ public class JavaFXTemplate extends Application {
         
         int requiredSpots = spotsComboBox.getValue();
         int selectedSpots = gameLogic.getPlayerNumbers().size();
-        
-        System.out.println("DEBUG: Required=" + requiredSpots + ", Selected=" + selectedSpots); // ADD THIS
         
         if (selectedSpots == requiredSpots) {
             statusLabel.setText("Ready! Click Confirm Selection.");
