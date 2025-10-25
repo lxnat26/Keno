@@ -50,7 +50,7 @@ public class GameBoard {
                 v.setFitWidth(60);
 
                 Label numText = new Label(String.valueOf(num));
-
+                numText.setStyle("-fx-font-weight: bold; -fx-text-fill: #000000; -fx-font-size: 16px; -fx-opacity: 1.0;");
                 StackPane p = new StackPane(v, numText);
 
                 // Centers the number depending on which image button it is
