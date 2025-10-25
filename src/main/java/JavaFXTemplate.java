@@ -43,6 +43,11 @@ public class JavaFXTemplate extends Application {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Keno");
 
+        // Initialize the size of the entire game window
+        primaryStage.setResizable(false);
+        primaryStage.setWidth(1250);
+        primaryStage.setHeight(700);
+
         // Initialize theme manager and game logic
         themeManager = new ThemeManager();
         gameLogic = new GameLogic();
@@ -119,7 +124,7 @@ public class JavaFXTemplate extends Application {
 
         //Sets up BorderPane
         BorderPane pane = new BorderPane();
-        pane.setPrefSize(700, 700);
+        pane.setPrefSize(1250, 700);
 
         //Adds padding and centerBox
         VBox centerBox = new VBox(20);
@@ -143,14 +148,14 @@ public class JavaFXTemplate extends Application {
         pane.setCenter(centerBox);
 
         StackPane root = new StackPane(bgImage, pane);
-        Scene scene = new Scene(root, 700, 700);
+        Scene scene = new Scene(root, 1250, 700);
         themeManager.applyToScene(scene);
         return scene;
     }
 
     public Scene createGameScene(){
         BorderPane pane = new BorderPane();
-        pane.setPrefSize(700, 700);
+        pane.setPrefSize(1250, 700);
 
         pane.setTop(menuBarGame);
         pane.setRight(sceneChangeToMenu);
@@ -159,7 +164,7 @@ public class JavaFXTemplate extends Application {
         GridPane grid = betCard.createGameBoard(e -> gameLogic.handleButtonPress((Button) e.getSource()), themeManager);
         pane.setLeft(grid);
 
-        Scene scene = new Scene(pane, 700, 700);
+        Scene scene = new Scene(pane, 1250, 700);
         themeManager.applyToScene(scene);
         return scene;
     }
