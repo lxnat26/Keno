@@ -5,6 +5,7 @@ import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -18,9 +19,11 @@ import javafx.geometry.Insets;
 import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.EventObject;
 import javafx.scene.layout.StackPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.event.ActionEvent;
 
 public class JavaFXTemplate extends Application {
     Button sceneChangeToGame, sceneChangeToMenu;
@@ -96,7 +99,11 @@ public class JavaFXTemplate extends Application {
 
         sceneMap = new HashMap<String,Scene>();
 
-        sceneChangeToGame.setOnAction(e -> primaryStage.setScene(sceneMap.get("game")));
+        sceneChangeToGame.setOnAction(e -> {
+            Scene gameScene = createGameScene();
+            sceneMap.put("game", gameScene);
+            primaryStage.setScene(sceneMap.get("game"));
+        });
         sceneChangeToMenu.setOnAction(e -> primaryStage.setScene(sceneMap.get("menu")));
 
         sceneMap.put("menu", createMenuScene());
@@ -146,7 +153,11 @@ public class JavaFXTemplate extends Application {
         pane.setPrefSize(700, 700);
 
         pane.setTop(menuBarGame);
-        pane.setCenter(sceneChangeToMenu);
+        pane.setRight(sceneChangeToMenu);
+
+        GameBoard betCard = new GameBoard();
+        GridPane grid = betCard.createGameBoard(e -> gameLogic.handleButtonPress((Button) e.getSource()), themeManager);
+        pane.setLeft(grid);
 
         Scene scene = new Scene(pane, 700, 700);
         themeManager.applyToScene(scene);

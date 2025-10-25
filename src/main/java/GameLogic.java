@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import javafx.scene.control.*;
 
 public class GameLogic {
     private int numSpots;
@@ -79,6 +80,23 @@ public class GameLogic {
             if (matches == 10) return 100000;
         }
         return 0;
+    }
+
+    public boolean handleButtonPress(Button button) {
+        int number = Integer.parseInt(button.getText());
+
+        if (playerNumbers.contains(number)) {
+            // Deselect
+            playerNumbers.remove(Integer.valueOf(number));
+            button.setStyle(""); // Reset style
+            return false;
+        } else if (playerNumbers.size() < numSpots) {
+            // Select
+            playerNumbers.add(number);
+            button.setStyle("-fx-background-color: gold; -fx-text-fill: black;");
+            return true;
+        }
+        return false;
     }
 
     public int getTotalWinnings() {
