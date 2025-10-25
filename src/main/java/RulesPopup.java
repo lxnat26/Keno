@@ -1,5 +1,7 @@
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class RulesPopup implements Popup {
 
@@ -22,12 +24,22 @@ public class RulesPopup implements Popup {
     }
 
     @Override
-    public void show() {
+    public void show(ThemeManager themeManager) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(getTitle());
         alert.setHeaderText(null);
         alert.setContentText(getContent());
-        alert.getDialogPane().setPrefSize(400, 300);
+
+        // Gets Icon Image for PopUp
+        String iconImagePath = "/images/" + themeManager.getPopUpImage();
+        Image iconImage = new Image(getClass().getResource(iconImagePath).toExternalForm());
+        ImageView iconImageView = new ImageView(iconImage);
+
+        // Sets up Icon and Styles Pop Up
+        iconImageView.setFitHeight(50);
+        iconImageView.setFitWidth(50);
+        alert.setGraphic(iconImageView);
+
         alert.showAndWait();
     }
 }

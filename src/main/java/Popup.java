@@ -1,5 +1,5 @@
 public interface Popup {
     String getTitle();
     String getContent();
-    void show();
+    void show(ThemeManager themeManager);
 }

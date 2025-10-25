@@ -23,7 +23,7 @@ public class GameOverPopup implements Popup {
     }
 
     @Override
-    public void show() {
+    public void show(ThemeManager themeManager) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(getTitle());
         alert.setHeaderText(null);

@@ -20,14 +20,16 @@ public class ThemeManager {
                 "#9BCCB6",     // Changed to match your original
                 "bunnyKeno.PNG",
                 "PinkButton.PNG",
-                "Carrot.PNG"
+                "Carrot.PNG",
+                "CarrotPng.PNG"
         });
 
         themes.put("cat", new String[]{
                 "#2A638D",     // Changed to match your original
                 "catKeno.PNG",
                 "OrangeButton.PNG",
-                "Fish.PNG"
+                "Fish.PNG",
+                "FishPng.PNG"
         });
 
     }
@@ -51,6 +53,8 @@ public class ThemeManager {
     public String getButtonImage(){return themes.get(currentTheme)[2];}
 
     public String getBoardImage(){return themes.get(currentTheme)[3];}
+
+    public String getPopUpImage(){return themes.get(currentTheme)[4];}
 
     public ImageView getBackgroundImageView(){
         String imageFile = getBackgroundImage();

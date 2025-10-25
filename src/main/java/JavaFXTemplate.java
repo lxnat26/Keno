@@ -392,12 +392,12 @@ public class JavaFXTemplate extends Application {
 
     public void showRules() {
         RulesPopup popup = new RulesPopup();
-        popup.show();
+        popup.show(themeManager);
     }
 
     public void showOdds() {
         OddsPopup popup = new OddsPopup();
-        popup.show();
+        popup.show(themeManager);
     }
 
     public void toggleTheme() {
