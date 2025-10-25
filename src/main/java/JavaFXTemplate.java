@@ -170,8 +170,8 @@ public class JavaFXTemplate extends Application {
         pane.setPrefSize(1250, 700);
 
         pane.setTop(menuBarGame);
-        // pane.setRight(sceneChangeToMenu);
 
+        // Creates the Keno Board
         gameBoard = new GameBoard();
         GridPane grid = gameBoard.createGameBoard(e -> {
             Button btn = (Button) e.getSource();
@@ -183,11 +183,12 @@ public class JavaFXTemplate extends Application {
         // Create right side control panel
         VBox rightPanel = createRightPanel();
 
+        // Container for back button and control panel
         VBox rightSide = new VBox(20);
         rightSide.setPadding(new Insets(10));
         rightSide.getChildren().addAll(sceneChangeToMenu, rightPanel);
         pane.setRight(rightSide);
-        
+
         Scene scene = new Scene(pane, 1250, 700);
         themeManager.applyToScene(scene);
         return scene;
@@ -244,6 +245,7 @@ public class JavaFXTemplate extends Application {
         // Add event handlers
         setupControlHandlers();
 
+        // Add all components to the panel
         rightPanel.getChildren().addAll(
             statusLabel,
             new Separator(),
@@ -343,6 +345,29 @@ public class JavaFXTemplate extends Application {
         }
     }
 
+    // private void checkIfReadyToStart() {
+    //     if (spotsComboBox.getValue() == null) {
+    //         return;
+    //     }
+        
+    //     int requiredSpots = spotsComboBox.getValue();
+    //     int selectedSpots = gameLogic.getPlayerNumbers().size();
+        
+    //     if (selectedSpots == requiredSpots) { // Player did pick enough spots, so need confirmation
+    //         statusLabel.setText("Ready! Click Confirm Selection.");
+    //         confirmSelectionButton.setDisable(false);
+    //         randomPickButton.setDisable(false);
+    //     } else if (selectedSpots < requiredSpots) { // Player did not pick enough spots yet
+    //         statusLabel.setText("Selected " + selectedSpots + "/" + requiredSpots + " numbers");
+    //         confirmSelectionButton.setDisable(true);
+    //         startDrawingButton.setDisable(true);
+    //     } else { // Player has selected too many spots
+    //         statusLabel.setText("Too many numbers selected!");
+    //         confirmSelectionButton.setDisable(true);
+    //         startDrawingButton.setDisable(true);
+    //     }
+    // }
+
     private void checkIfReadyToStart() {
         if (spotsComboBox.getValue() == null) {
             return;
@@ -351,17 +376,19 @@ public class JavaFXTemplate extends Application {
         int requiredSpots = spotsComboBox.getValue();
         int selectedSpots = gameLogic.getPlayerNumbers().size();
         
+        System.out.println("DEBUG: Required=" + requiredSpots + ", Selected=" + selectedSpots); // ADD THIS
+        
         if (selectedSpots == requiredSpots) {
             statusLabel.setText("Ready! Click Confirm Selection.");
-            confirmSelectionButton.setDisable(false);  // Enable confirm button instead
+            confirmSelectionButton.setDisable(false);
             randomPickButton.setDisable(false);
-            // DON'T disable buttons yet - let them change their mind
-            // DON'T enable start drawing yet
-        } else if (selectedSpots < requiredSpots) {
+        } 
+        else if (selectedSpots < requiredSpots) {
             statusLabel.setText("Selected " + selectedSpots + "/" + requiredSpots + " numbers");
             confirmSelectionButton.setDisable(true);
             startDrawingButton.setDisable(true);
-        } else {
+        } 
+        else {
             statusLabel.setText("Too many numbers selected!");
             confirmSelectionButton.setDisable(true);
             startDrawingButton.setDisable(true);
@@ -379,11 +406,67 @@ public class JavaFXTemplate extends Application {
     }
 
     public void toggleTheme() {
+        // Save current game state before rebuilding
+        Integer savedSpots = spotsComboBox.getValue();
+        Integer savedDrawings = drawingsComboBox.getValue();
+        boolean spotsWasDisabled = spotsComboBox.isDisabled();
+        boolean drawingsWasDisabled = drawingsComboBox.isDisabled();
+        boolean buttonsWereEnabled = !gameBoard.getGridButtons().get(0).isDisabled(); // Check if board was enabled
+        
         themeManager.toggleTheme();
 
         // Rebuilding menu and game scene with new image
         sceneMap.put("menu", createMenuScene());
         sceneMap.put("game", createGameScene());
+
+        // Restore the ComboBox values
+        if (savedSpots != null) {
+            spotsComboBox.setValue(savedSpots);
+            spotsComboBox.setDisable(spotsWasDisabled);
+        }
+        if (savedDrawings != null) {
+            drawingsComboBox.setValue(savedDrawings);
+            drawingsComboBox.setDisable(drawingsWasDisabled);
+        }
+
+        // Re-enable the board if it was enabled before
+        if (buttonsWereEnabled) {
+            gameBoard.enableAllButtons();
+        }
+
+        // Reapply the opacity to selected numbers on the new buttons
+        if (!gameLogic.getPlayerNumbers().isEmpty()) {
+            for (int selectedNum : gameLogic.getPlayerNumbers()) {
+                for (Button btn : gameBoard.getGridButtons()) {
+                    if ((int) btn.getUserData() == selectedNum) {
+                        StackPane graphic = (StackPane) btn.getGraphic();
+                        graphic.setOpacity(0.4); // Reapply the dimmed effect
+                        break;
+                    }
+                }
+            }
+            
+            // Update the status label appropriately
+            int requiredSpots = savedSpots != null ? savedSpots : 0;
+            int selectedSpots = gameLogic.getPlayerNumbers().size();
+            
+            if (selectedSpots == requiredSpots && requiredSpots > 0) {
+                statusLabel.setText("Ready! Click Confirm Selection.");
+                confirmSelectionButton.setDisable(false);
+            } else if (selectedSpots < requiredSpots) {
+                statusLabel.setText("Selected " + selectedSpots + "/" + requiredSpots + " numbers");
+            }
+        } else {
+            // No selections yet, but settings might be chosen
+            if (savedSpots != null && savedDrawings != null) {
+                statusLabel.setText("Select " + savedSpots + " numbers on the bet card");
+            }
+        }
+        
+        // Re-enable random pick button if settings were complete
+        if (savedSpots != null && savedDrawings != null) {
+            randomPickButton.setDisable(false);
+        }
 
         Scene current = primaryStage.getScene();
 
@@ -393,11 +476,6 @@ public class JavaFXTemplate extends Application {
         else{
             primaryStage.setScene(sceneMap.get("game"));
         }
-        // Apply theme to BOTH scenes
-        // I WILL UNCOMMENT FOR NOW BUT TALK WITH LENA LATER BOUT THIS
-        //themeManager.applyToScene(sceneMap.get("menu"));
-        //themeManager.applyToScene(sceneMap.get("game"));
-
     }
 
     public void exitGame() {
