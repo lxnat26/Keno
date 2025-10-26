@@ -1,7 +1,4 @@
-import javafx.animation.FadeTransition;
-import javafx.animation.PauseTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.SequentialTransition;
+import javafx.animation.*;
 
 import javafx.application.Application;
 
@@ -32,6 +29,7 @@ import java.util.ArrayList;
 public class JavaFXTemplate extends Application {
 
     ImageView convey;
+    ImageView object;
 
     // buttons to switch between screens
     Button sceneChangeToGame, sceneChangeToMenu;
@@ -204,7 +202,9 @@ public class JavaFXTemplate extends Application {
 
     // creates main game screen layout
     public Scene createGameScene() {
+        // Gets animation ImageViews
         convey = themeManager.getConveyorImage();
+        object = themeManager.getObjectImageView();
 
         StackPane root = new StackPane();
         BorderPane pane = new BorderPane();
@@ -234,7 +234,9 @@ public class JavaFXTemplate extends Application {
         root.getChildren().add(convey);
 
         StackPane.setAlignment(convey, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(convey, new Insets(0, 20, 20, 0));
+        StackPane.setMargin(convey, new Insets(0, 0, 20, 0));
+
+        animateImage(object, root);
 
         // right side: control panel
         VBox rightPanel = createRightPanel();
@@ -490,6 +492,18 @@ public class JavaFXTemplate extends Application {
         sequence.play();
     }
 
+    private void animateImage(ImageView object, StackPane root){
+        StackPane.setMargin(object, new Insets(0, 210, 95, 0));
+        StackPane.setAlignment(object, Pos.BOTTOM_RIGHT);
+
+        root.getChildren().add(object);
+
+        TranslateTransition tt = new TranslateTransition(Duration.millis(5000), object);
+        tt.setByX(300);
+        tt.setCycleCount(TranslateTransition.INDEFINITE);
+        tt.play();
+    }
+
     private void createImageWithNumber(int num, boolean isMatch){
        StackPane stack = new StackPane();
 
@@ -626,6 +640,9 @@ public class JavaFXTemplate extends Application {
 
         ImageView newConveyor = themeManager.getConveyorImage();
         convey.setImage(newConveyor.getImage());
+
+        ImageView newObject = themeManager.getObjectImageView();
+        object.setImage(newObject.getImage());
 
         Scene current = primaryStage.getScene();
 

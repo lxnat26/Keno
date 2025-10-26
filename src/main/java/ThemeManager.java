@@ -77,16 +77,29 @@ public class ThemeManager {
     }
 
     public ImageView getConveyorImage(){
-        // Gets Icon Image for PopUp
+        // Gets Conveyor Image Path
         String animationImagePath = "/images/" + getAnimationImage();
         Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
         ImageView conveyor = new ImageView(animationImage);
 
-        // Sets up Icon and Styles Pop Up
+        // Sets size of Conveyor Image
         conveyor.setFitHeight(200);
         conveyor.setFitWidth(340);
 
         return conveyor;
+    }
+
+    public ImageView getObjectImageView(){
+        // Gets Object Image Path
+        String imagePath = "/images/" + getAnimationObjectImage();
+        Image i = new Image(getClass().getResource(imagePath).toExternalForm());
+        ImageView objectImageView = new ImageView(i);
+
+        // Sets up size of Object Image
+        objectImageView.setFitHeight(70);
+        objectImageView.setFitWidth(70);
+
+        return objectImageView;
     }
 
     public void applyToScene(Scene scene) {
