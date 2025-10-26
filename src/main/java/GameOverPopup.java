@@ -35,6 +35,16 @@ public class GameOverPopup implements Popup {
         alert.getButtonTypes().setAll(playAgain, backToMenu);
 
         Optional<ButtonType> result = alert.showAndWait();
+        
         // Handle button clicks
+        if (result.isPresent()) {
+            if (result.get() == playAgain) {
+                // Reset game and stay on game screen
+                app.startNewGame();
+            } else if (result.get() == backToMenu) {
+                // Use the existing back to menu button - it has all the logic we need!
+                app.sceneChangeToMenu.fire();
+            }
+        }
     }
 }
