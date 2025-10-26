@@ -22,7 +22,8 @@ public class ThemeManager {
                 "PinkButton.PNG",
                 "Carrot.PNG",
                 "CarrotPng.PNG",
-                "BunnyConveyor.PNG"
+                "BunnyConveyor.PNG",
+                "CarrotPng.PNG",
         });
 
         themes.put("cat", new String[]{
@@ -31,7 +32,8 @@ public class ThemeManager {
                 "OrangeButton.PNG",
                 "Fish.PNG",
                 "FishPng.PNG",
-                "BunnyConveyor.PNG"
+                "BunnyConveyor.PNG",
+                "FishPng.PNG",
         });
 
     }
@@ -59,6 +61,8 @@ public class ThemeManager {
     public String getPopUpImage(){return themes.get(currentTheme)[4];}
 
     public String getAnimationImage(){return themes.get(currentTheme)[5];}
+
+    public String getAnimationObjectImage(){return themes.get(currentTheme)[6];}
 
     public ImageView getBackgroundImageView(){
         String imageFile = getBackgroundImage();

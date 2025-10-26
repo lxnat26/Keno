@@ -6,11 +6,7 @@ import javafx.animation.SequentialTransition;
 import javafx.application.Application;
 
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
@@ -19,9 +15,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.layout.StackPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.Node;
 
 import javafx.stage.Stage;
 
@@ -224,8 +220,8 @@ public class JavaFXTemplate extends Application {
         VBox rightPanel = createRightPanel();
 
         VBox rightSide = new VBox(10);
-        rightSide.setPadding(new Insets(10));
-        rightSide.getChildren().addAll(sceneChangeToMenu, rightPanel);
+        rightSide.setPadding(new Insets(20, 0, 0 ,0));
+        rightSide.getChildren().addAll(rightPanel);
         pane.setRight(rightSide);
 
         Scene scene = new Scene(pane, 1250, 700);
@@ -289,7 +285,19 @@ public class JavaFXTemplate extends Application {
         drawingInfoPanel.setPadding(new Insets(10));
         drawingInfoPanel.setStyle("-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;");
         drawingInfoPanel.setVisible(false);
-        drawingInfoPanel.setMaxWidth(250);
+        drawingInfoPanel.setPrefWidth(350);
+        drawingInfoPanel.setPrefHeight(50);
+        drawingInfoPanel.setMaxHeight(70);
+        drawingInfoPanel.setMaxWidth(350);
+
+        // Gets Icon Image for PopUp
+        String animationImagePath = "/images/" + themeManager.getAnimationImage();
+        Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
+        ImageView conveyor = new ImageView(animationImage);
+
+        // Sets up Icon and Styles Pop Up
+        conveyor.setFitHeight(160);
+        conveyor.setFitWidth(200);
 
         drawingNumberLabel = new Label();
         currentDrawnNumberLabel = new Label();
@@ -441,7 +449,8 @@ public class JavaFXTemplate extends Application {
                 int currentNumber = drawnNumbers.get(index);
                 boolean isMatch = matches.contains(currentNumber);
                 currentDrawnNumberLabel.setText(String.valueOf(currentNumber));
-                addNumberToDrawnDisplay(currentNumber, isMatch);
+//                addNumberToDrawnDisplay(currentNumber, isMatch);
+                Node image = createImageWithNumber(currentNumber, isMatch);
 
                 // highlight the drawn number on board
                 for (Button btn : gameBoard.getGridButtons()) {
@@ -475,24 +484,60 @@ public class JavaFXTemplate extends Application {
         sequence.play();
     }
 
-    // adds small circle visuals for each drawn number
-    private void addNumberToDrawnDisplay(int number, boolean isMatch) {
-        StackPane numberCircle = new StackPane();
-        Circle circle = new Circle(16);
+    private void animateObject(Node object){
+        object.setLayoutX(0);
+        object.setLayoutY(100);
 
-        if (isMatch) {
-            circle.setFill(Color.rgb(76, 175, 80));
-            circle.setStroke(Color.rgb(56, 142, 60));
-        } else {
-            circle.setFill(Color.rgb(176, 196, 222));
-            circle.setStroke(Color.DARKGRAY);
+
+    }
+
+    private Node createImageWithNumber(int num, boolean isMatch){
+       StackPane stack = new StackPane();
+
+        // Gets Icon Image for PopUp
+        String imagePath = "/images/" + themeManager.getAnimationObjectImage();
+        Image i = new Image(getClass().getResource(imagePath).toExternalForm());
+        ImageView objectImageView = new ImageView(i);
+
+        objectImageView.setFitHeight(40);
+        objectImageView.setFitWidth(40);
+
+        Label number = new Label(String.valueOf(num));
+        number.setStyle("-fx-font-size: 10px; -fx-font-weight: bold;");
+
+        // Changes tint on top of image if it's a winning number or not
+        if(isMatch){
+            Circle greenTint = new Circle(16, Color.rgb(76, 175, 80, 0.2));
+            stack.getChildren().addAll(objectImageView, number, greenTint);
+        }
+        else{
+            Circle redTint =  new Circle(16, Color.rgb(255, 102, 102, 0.2));
+            stack.getChildren().addAll(objectImageView, number, redTint);
         }
 
-        Label label = new Label(String.valueOf(number));
-        label.setStyle("-fx-font-size: 10px; -fx-font-weight: bold;");
-        numberCircle.getChildren().addAll(circle, label);
-        drawnNumbersDisplay.getChildren().add(numberCircle);
+        drawnNumbersDisplay.getChildren().add(stack);
+
+        return stack;
     }
+
+    // adds small circle visuals for each drawn number
+//    private void addNumberToDrawnDisplay(int number, boolean isMatch) {
+//        StackPane numberCircle = new StackPane();
+//        Circle circle = new Circle(16);
+//
+//        if (isMatch) {
+//            circle.setFill(Color.rgb(76, 175, 80));
+//            circle.setStroke(Color.rgb(56, 142, 60));
+//        } else {
+//            circle.setFill(Color.rgb(176, 196, 222));
+//            circle.setStroke(Color.DARKGRAY);
+//        }
+//
+//        Label label = new Label(String.valueOf(number));
+//        label.setStyle("-fx-font-size: 10px; -fx-font-weight: bold;");
+//        numberCircle.getChildren().addAll(circle, label);
+//        drawnNumbersDisplay.getChildren().add(numberCircle);
+//    }
 
     // shows final results after a drawing
     private void showDrawingResults(ArrayList<Integer> matches) {
