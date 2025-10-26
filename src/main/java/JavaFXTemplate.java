@@ -31,6 +31,8 @@ import java.util.ArrayList;
 
 public class JavaFXTemplate extends Application {
 
+    ImageView convey;
+
     // buttons to switch between screens
     Button sceneChangeToGame, sceneChangeToMenu;
     
@@ -142,7 +144,6 @@ public class JavaFXTemplate extends Application {
 
         // go back to menu
         sceneChangeToMenu.setOnAction(e -> {
-            resetGame();
             sceneMap.put("menu", createMenuScene());
             primaryStage.setScene(sceneMap.get("menu"));
         });
@@ -203,6 +204,7 @@ public class JavaFXTemplate extends Application {
 
     // creates main game screen layout
     public Scene createGameScene() {
+        convey = themeManager.getConveyorImage();
 
         StackPane root = new StackPane();
         BorderPane pane = new BorderPane();
@@ -214,7 +216,6 @@ public class JavaFXTemplate extends Application {
         // Adds BorderPane to StackPane and fixes layout of menuBar
         root.getChildren().add(pane);
         BorderPane.setMargin(menuBarGame, new Insets(0, 0, 0, 60));
-
 
         // left side: keno number grid
         gameBoard = new GameBoard();
@@ -230,19 +231,10 @@ public class JavaFXTemplate extends Application {
         leftPanel.getChildren().add(grid);
         pane.setLeft(leftPanel);
 
-        // Gets Icon Image for PopUp
-        String animationImagePath = "/images/" + themeManager.getAnimationImage();
-        Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
-        ImageView conveyor = new ImageView(animationImage);
+        root.getChildren().add(convey);
 
-        // Sets up Icon and Styles Pop Up
-        conveyor.setFitHeight(200);
-        conveyor.setFitWidth(340);
-
-        root.getChildren().add(conveyor);
-
-        StackPane.setAlignment(conveyor, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(conveyor, new Insets(0, 20, 20, 0));
+        StackPane.setAlignment(convey, Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(convey, new Insets(0, 20, 20, 0));
 
         // right side: control panel
         VBox rightPanel = createRightPanel();
@@ -524,7 +516,6 @@ public class JavaFXTemplate extends Application {
 
         drawnNumbersDisplay.getChildren().add(stack);
 
-//        return stack;
     }
 
     // shows final results after a drawing
@@ -576,53 +567,11 @@ public class JavaFXTemplate extends Application {
         javafx.application.Platform.runLater(() -> {
             try {
                 GameOverPopup popup = new GameOverPopup(gameLogic.getTotalWinnings(), this);
-                popup.show(themeManager);
+                popup.show(themeManager, primaryStage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-    }
-
-    // lets player start a brand new game without going back to menu
-    public void startNewGame() {
-        resetGame();
-    }
-
-    // resets everything to original state (used for replay or back to menu)
-    private void resetGame() {
-        gameLogic.reset();
-
-        // show settings again, hide drawing info
-        settingsContainer.setVisible(true);
-        settingsContainer.setManaged(true);
-        drawingInfoPanel.setVisible(false);
-        drawingInfoPanel.setManaged(false);
-
-        // reset dropdowns and buttons
-        spotsComboBox.setValue(null);
-        spotsComboBox.setDisable(false);
-        drawingsComboBox.setValue(null);
-        drawingsComboBox.setDisable(false);
-
-        randomPickButton.setDisable(true);
-        confirmSelectionButton.setDisable(true);
-        startDrawingButton.setDisable(true);
-        nextDrawingButton.setVisible(false);
-        nextDrawingButton.setManaged(false);
-
-        statusLabel.setText("Select number of spots and drawings");
-        drawnNumbersDisplay.getChildren().clear();
-        currentDrawnNumberLabel.setText("");
-        currentDrawnNumberLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #FF4444;");
-
-        // reset the board visuals
-        for (Button btn : gameBoard.getGridButtons()) {
-            btn.setStyle("-fx-background-color: white;");
-            StackPane graphic = (StackPane) btn.getGraphic();
-            graphic.getChildren().removeIf(node -> node instanceof Rectangle);
-            graphic.setOpacity(1.0);
-            btn.setDisable(true);
-        }
     }
 
     // checks if both dropdowns (spots + drawings) are selected
@@ -662,18 +611,22 @@ public class JavaFXTemplate extends Application {
     // opens popup showing keno rules
     public void showRules() {
         RulesPopup popup = new RulesPopup();
-        popup.show(themeManager);
+        popup.show(themeManager, primaryStage);
     }
 
     // opens popup showing keno odds table
     public void showOdds() {
         OddsPopup popup = new OddsPopup();
-        popup.show(themeManager);
+        popup.show(themeManager, primaryStage);
     }
 
     // switches between light/dark or fish theme without losing state
     public void toggleTheme() {
         themeManager.toggleTheme();
+
+        ImageView newConveyor = themeManager.getConveyorImage();
+        convey.setImage(newConveyor.getImage());
+
         Scene current = primaryStage.getScene();
 
         if (current == sceneMap.get("menu")) {

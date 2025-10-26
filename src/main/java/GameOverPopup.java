@@ -3,6 +3,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 import java.util.Optional;
 
@@ -26,7 +27,7 @@ public class GameOverPopup implements Popup {
     }
 
     @Override
-    public void show(ThemeManager themeManager) {
+    public void show(ThemeManager themeManager, Stage primaryStage) {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(getTitle());
         alert.setHeaderText(null);
@@ -44,8 +45,9 @@ public class GameOverPopup implements Popup {
 
         ButtonType playAgain = new ButtonType("Play Again");
         ButtonType backToMenu = new ButtonType("Back to Menu");
+        ButtonType exit = new ButtonType("Exit Game");
 
-        alert.getButtonTypes().setAll(playAgain, backToMenu);
+        alert.getButtonTypes().setAll(playAgain, backToMenu, exit);
 
         Optional<ButtonType> result = alert.showAndWait();
         
@@ -53,10 +55,12 @@ public class GameOverPopup implements Popup {
         if (result.isPresent()) {
             if (result.get() == playAgain) {
                 // Reset game and stay on game screen
-                app.startNewGame();
+                app.sceneChangeToGame.fire();
             } else if (result.get() == backToMenu) {
                 // Use the existing back to menu button - it has all the logic we need!
                 app.sceneChangeToMenu.fire();
+            } else if(result.get() == exit){
+                primaryStage.close();
             }
         }
     }

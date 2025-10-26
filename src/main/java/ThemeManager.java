@@ -76,6 +76,19 @@ public class ThemeManager {
         return v;
     }
 
+    public ImageView getConveyorImage(){
+        // Gets Icon Image for PopUp
+        String animationImagePath = "/images/" + getAnimationImage();
+        Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
+        ImageView conveyor = new ImageView(animationImage);
+
+        // Sets up Icon and Styles Pop Up
+        conveyor.setFitHeight(200);
+        conveyor.setFitWidth(340);
+
+        return conveyor;
+    }
+
     public void applyToScene(Scene scene) {
         String bgColor = getBackgroundColor();
 

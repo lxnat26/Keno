@@ -2,6 +2,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class RulesPopup implements Popup {
 
@@ -24,7 +25,7 @@ public class RulesPopup implements Popup {
     }
 
     @Override
-    public void show(ThemeManager themeManager) {
+    public void show(ThemeManager themeManager, Stage primaryStage) {
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle(getTitle());
         alert.setHeaderText(null);
