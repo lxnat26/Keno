@@ -32,10 +32,9 @@ public class ThemeManager {
                 "OrangeButton.PNG",
                 "Fish.PNG",
                 "FishPng.PNG",
-                "BunnyConveyor.PNG",
+                "CatConveyor.PNG",
                 "FishPng.PNG",
         });
-
     }
 
     public void toggleTheme() {
@@ -84,4 +83,5 @@ public class ThemeManager {
                 "-fx-background-color: " + bgColor + ";"
         );
     }
+
 }

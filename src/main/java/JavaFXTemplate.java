@@ -207,9 +207,13 @@ public class JavaFXTemplate extends Application {
         StackPane root = new StackPane();
         BorderPane pane = new BorderPane();
 
+        // Sets up BorderPane size and menuBar at top
         pane.setPrefSize(1250, 700);
         pane.setTop(menuBarGame);
+
+        // Adds BorderPane to StackPane and fixes layout of menuBar
         root.getChildren().add(pane);
+        BorderPane.setMargin(menuBarGame, new Insets(0, 0, 0, 60));
 
 
         // left side: keno number grid
@@ -314,18 +318,6 @@ public class JavaFXTemplate extends Application {
         drawingInfoPanel.setMaxHeight(30);
         drawingInfoPanel.setMaxWidth(350);
 
-//        // Gets Icon Image for PopUp
-//        String animationImagePath = "/images/" + themeManager.getAnimationImage();
-//        Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
-//        ImageView conveyor = new ImageView(animationImage);
-//
-//        // Sets up Icon and Styles Pop Up
-//        conveyor.setFitHeight(180);
-//        conveyor.setFitWidth(300);
-
-//        Region spacer = new Region();
-//        VBox.setVgrow(spacer, Priority.ALWAYS); // fills vertical space above conveyor
-
         drawingNumberLabel = new Label();
         currentDrawnNumberLabel = new Label();
         currentDrawnNumberLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #FF4444;");
@@ -360,8 +352,6 @@ public class JavaFXTemplate extends Application {
             winningsLabel,
             totalWinningsLabel,
             nextDrawingButton
-//            spacer,
-//            conveyor
         );
 
         setupControlHandlers();
@@ -478,8 +468,7 @@ public class JavaFXTemplate extends Application {
                 int currentNumber = drawnNumbers.get(index);
                 boolean isMatch = matches.contains(currentNumber);
                 currentDrawnNumberLabel.setText(String.valueOf(currentNumber));
-//                addNumberToDrawnDisplay(currentNumber, isMatch);
-                Node image = createImageWithNumber(currentNumber, isMatch);
+                createImageWithNumber(currentNumber, isMatch);
 
                 // highlight the drawn number on board
                 for (Button btn : gameBoard.getGridButtons()) {
@@ -487,7 +476,8 @@ public class JavaFXTemplate extends Application {
                         StackPane graphic = (StackPane) btn.getGraphic();
                         boolean playerPicked = gameLogic.getPlayerNumbers().contains(currentNumber);
                         if(playerPicked){
-                            Circle greenTint = new Circle(16, Color.rgb(76, 175, 80, 0.75));
+                            Rectangle greenTint = new Rectangle(60, 60, Color.rgb(76, 175, 80, 0.5));
+//                            Circle greenTint = new Circle(16, Color.rgb(76, 175, 80, 0.75));
                             graphic.getChildren().addAll(greenTint);
                             graphic.setOpacity(0.9);
                         }
@@ -508,13 +498,7 @@ public class JavaFXTemplate extends Application {
         sequence.play();
     }
 
-    private void animateObject(Node object){
-        object.setLayoutX(0);
-        object.setLayoutY(100);
-
-    }
-
-    private Node createImageWithNumber(int num, boolean isMatch){
+    private void createImageWithNumber(int num, boolean isMatch){
        StackPane stack = new StackPane();
 
         // Gets Icon Image for PopUp
@@ -540,7 +524,7 @@ public class JavaFXTemplate extends Application {
 
         drawnNumbersDisplay.getChildren().add(stack);
 
-        return stack;
+//        return stack;
     }
 
     // shows final results after a drawing
