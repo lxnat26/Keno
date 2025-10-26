@@ -57,7 +57,7 @@ public class JavaFXTemplate extends Application {
     Label statusLabel;
     Button confirmSelectionButton;
     Button nextDrawingButton;
-    
+
     // group of settings that we hide when game starts
     VBox settingsContainer;
     
@@ -203,9 +203,14 @@ public class JavaFXTemplate extends Application {
 
     // creates main game screen layout
     public Scene createGameScene() {
+
+        StackPane root = new StackPane();
         BorderPane pane = new BorderPane();
+
         pane.setPrefSize(1250, 700);
         pane.setTop(menuBarGame);
+        root.getChildren().add(pane);
+
 
         // left side: keno number grid
         gameBoard = new GameBoard();
@@ -214,7 +219,26 @@ public class JavaFXTemplate extends Application {
             gameLogic.handleButtonPress(btn);
             checkIfReadyToStart();
         }, themeManager);
-        pane.setLeft(grid);
+        VBox leftPanel = new VBox(5);
+        leftPanel.setPadding(new Insets(10));
+        leftPanel.setAlignment(Pos.TOP_CENTER);
+
+        leftPanel.getChildren().add(grid);
+        pane.setLeft(leftPanel);
+
+        // Gets Icon Image for PopUp
+        String animationImagePath = "/images/" + themeManager.getAnimationImage();
+        Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
+        ImageView conveyor = new ImageView(animationImage);
+
+        // Sets up Icon and Styles Pop Up
+        conveyor.setFitHeight(200);
+        conveyor.setFitWidth(340);
+
+        root.getChildren().add(conveyor);
+
+        StackPane.setAlignment(conveyor, Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(conveyor, new Insets(0, 20, 20, 0));
 
         // right side: control panel
         VBox rightPanel = createRightPanel();
@@ -224,7 +248,7 @@ public class JavaFXTemplate extends Application {
         rightSide.getChildren().addAll(rightPanel);
         pane.setRight(rightSide);
 
-        Scene scene = new Scene(pane, 1250, 700);
+        Scene scene = new Scene(root, 1250, 700);
         scene.getRoot().setStyle("-fx-opacity: 1.0;");
         themeManager.applyToScene(scene);
         return scene;
@@ -286,18 +310,21 @@ public class JavaFXTemplate extends Application {
         drawingInfoPanel.setStyle("-fx-background-color: rgba(255,255,255,0.9); -fx-background-radius: 10;");
         drawingInfoPanel.setVisible(false);
         drawingInfoPanel.setPrefWidth(350);
-        drawingInfoPanel.setPrefHeight(50);
-        drawingInfoPanel.setMaxHeight(70);
+        drawingInfoPanel.setPrefHeight(30);
+        drawingInfoPanel.setMaxHeight(30);
         drawingInfoPanel.setMaxWidth(350);
 
-        // Gets Icon Image for PopUp
-        String animationImagePath = "/images/" + themeManager.getAnimationImage();
-        Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
-        ImageView conveyor = new ImageView(animationImage);
+//        // Gets Icon Image for PopUp
+//        String animationImagePath = "/images/" + themeManager.getAnimationImage();
+//        Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
+//        ImageView conveyor = new ImageView(animationImage);
+//
+//        // Sets up Icon and Styles Pop Up
+//        conveyor.setFitHeight(180);
+//        conveyor.setFitWidth(300);
 
-        // Sets up Icon and Styles Pop Up
-        conveyor.setFitHeight(160);
-        conveyor.setFitWidth(200);
+//        Region spacer = new Region();
+//        VBox.setVgrow(spacer, Priority.ALWAYS); // fills vertical space above conveyor
 
         drawingNumberLabel = new Label();
         currentDrawnNumberLabel = new Label();
@@ -333,6 +360,8 @@ public class JavaFXTemplate extends Application {
             winningsLabel,
             totalWinningsLabel,
             nextDrawingButton
+//            spacer,
+//            conveyor
         );
 
         setupControlHandlers();
@@ -457,16 +486,11 @@ public class JavaFXTemplate extends Application {
                     if ((int) btn.getUserData() == currentNumber) {
                         StackPane graphic = (StackPane) btn.getGraphic();
                         boolean playerPicked = gameLogic.getPlayerNumbers().contains(currentNumber);
-                        if (isMatch) {
-                            Rectangle green = new Rectangle(60, 60, Color.rgb(76, 175, 80, 0.7));
-                            graphic.getChildren().add(0, green);
-                        } else if (playerPicked) {
-                            graphic.setOpacity(0.4);
-                        } else {
-                            Rectangle blue = new Rectangle(60, 60, Color.rgb(176, 196, 222, 0.6));
-                            graphic.getChildren().add(0, blue);
+                        if(playerPicked){
+                            Circle greenTint = new Circle(16, Color.rgb(76, 175, 80, 0.75));
+                            graphic.getChildren().addAll(greenTint);
+                            graphic.setOpacity(0.9);
                         }
-                        break;
                     }
                 }
 
@@ -487,7 +511,6 @@ public class JavaFXTemplate extends Application {
     private void animateObject(Node object){
         object.setLayoutX(0);
         object.setLayoutY(100);
-
 
     }
 
@@ -519,25 +542,6 @@ public class JavaFXTemplate extends Application {
 
         return stack;
     }
-
-    // adds small circle visuals for each drawn number
-//    private void addNumberToDrawnDisplay(int number, boolean isMatch) {
-//        StackPane numberCircle = new StackPane();
-//        Circle circle = new Circle(16);
-//
-//        if (isMatch) {
-//            circle.setFill(Color.rgb(76, 175, 80));
-//            circle.setStroke(Color.rgb(56, 142, 60));
-//        } else {
-//            circle.setFill(Color.rgb(176, 196, 222));
-//            circle.setStroke(Color.DARKGRAY);
-//        }
-//
-//        Label label = new Label(String.valueOf(number));
-//        label.setStyle("-fx-font-size: 10px; -fx-font-weight: bold;");
-//        numberCircle.getChildren().addAll(circle, label);
-//        drawnNumbersDisplay.getChildren().add(numberCircle);
-//    }
 
     // shows final results after a drawing
     private void showDrawingResults(ArrayList<Integer> matches) {
