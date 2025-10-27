@@ -14,7 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.Node;
+import javafx.scene.text.Font;
 
 import javafx.stage.Stage;
 
@@ -193,7 +193,7 @@ public class JavaFXTemplate extends Application {
         // Stacks background Image (Keno Logo) to Borderpane
         StackPane root = new StackPane(bgImage, pane);
 
-        // Creates Scene and applys the theme
+        // Creates Scene and applies the theme
         Scene scene = new Scene(root, 1250, 700);
         themeManager.applyToScene(scene);
 
@@ -225,7 +225,7 @@ public class JavaFXTemplate extends Application {
             checkIfReadyToStart();
         }, themeManager);
         VBox leftPanel = new VBox(5);
-        leftPanel.setPadding(new Insets(10));
+        leftPanel.setPadding(new Insets(10, 0, 0, 20));
         leftPanel.setAlignment(Pos.TOP_CENTER);
 
         leftPanel.getChildren().add(grid);
@@ -234,7 +234,7 @@ public class JavaFXTemplate extends Application {
         root.getChildren().add(convey);
 
         StackPane.setAlignment(convey, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(convey, new Insets(0, 0, 20, 0));
+        StackPane.setMargin(convey, new Insets(0, 0, 0, 0));
 
         animateImage(object, root);
 
@@ -255,40 +255,53 @@ public class JavaFXTemplate extends Application {
     // builds the right-side controls for spots, drawings, etc.
     private VBox createRightPanel() {
         VBox rightPanel = new VBox(20);
-        rightPanel.setPadding(new Insets(20, 175, 0, 50));
+        rightPanel.setPadding(new Insets(40, 175, 0, 50));
         rightPanel.setAlignment(Pos.TOP_CENTER);
 
+        // Font for text
+        Font comboFont = themeManager.getFont(14);
+
         statusLabel = new Label("Select number of spots and drawings");
-        statusLabel.setStyle("-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #333;");
+        statusLabel.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 20px; -fx-font-weight: bold;");
         statusLabel.setWrapText(true);
-        statusLabel.setMaxWidth(200);
+        statusLabel.setMaxWidth(400);
+        statusLabel.setTranslateX(25);
 
         Label spotsLabel = new Label("Number of Spots:");
+        spotsLabel.setFont(themeManager.getFont(18));
         spotsComboBox = new ComboBox<>();
         spotsComboBox.getItems().addAll(1, 4, 8, 10);
         spotsComboBox.setPromptText("Choose spots...");
         spotsComboBox.setPrefWidth(150);
+        spotsComboBox.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 16px;");
+
+
 
         Label drawingsLabel = new Label("Number of Drawings:");
+        drawingsLabel.setFont(themeManager.getFont(18));
         drawingsComboBox = new ComboBox<>();
         drawingsComboBox.getItems().addAll(1, 2, 3, 4);
         drawingsComboBox.setPromptText("Choose drawings...");
         drawingsComboBox.setPrefWidth(150);
+        drawingsComboBox.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 14px;");
 
         randomPickButton = new Button("Random Pick");
         randomPickButton.setPrefWidth(150);
         randomPickButton.setPrefHeight(40);
         randomPickButton.setDisable(true);
+        randomPickButton.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 16px;");
 
         confirmSelectionButton = new Button("Confirm Selection");
         confirmSelectionButton.setPrefWidth(150);
         confirmSelectionButton.setPrefHeight(40);
         confirmSelectionButton.setDisable(true);
+        confirmSelectionButton.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 16px;");
 
         startDrawingButton = new Button("Start Drawing");
         startDrawingButton.setPrefWidth(150);
         startDrawingButton.setPrefHeight(40);
         startDrawingButton.setDisable(true);
+        startDrawingButton.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 16px;");
 
         settingsContainer = new VBox(10);
         settingsContainer.setAlignment(Pos.CENTER);
@@ -314,9 +327,10 @@ public class JavaFXTemplate extends Application {
 
         drawingNumberLabel = new Label();
         currentDrawnNumberLabel = new Label();
-        currentDrawnNumberLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #FF4444;");
+        currentDrawnNumberLabel.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #0066CC;");
 
         Label drawnNumbersHeader = new Label("Drawn Numbers:");
+        drawnNumbersHeader.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 16px;");
         drawnNumbersDisplay = new FlowPane();
         drawnNumbersDisplay.setHgap(4);
         drawnNumbersDisplay.setVgap(4);
@@ -362,6 +376,8 @@ public class JavaFXTemplate extends Application {
 
     // connects all the button actions
     private void setupControlHandlers() {
+        Font fontStyle = themeManager.getFont(14);
+
         spotsComboBox.setOnAction(e -> checkIfSettingsComplete());
         drawingsComboBox.setOnAction(e -> checkIfSettingsComplete());
 
@@ -429,7 +445,7 @@ public class JavaFXTemplate extends Application {
         nextDrawingButton.setOnAction(e -> {
             gameLogic.incrementDrawing();
             resetBoardForNextDrawing();
-            currentDrawnNumberLabel.setStyle("-fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #FF4444;");
+            currentDrawnNumberLabel.setStyle("-fx-font-family: '" + fontStyle.getFamily() + "'; -fx-font-size: 36px; -fx-font-weight: bold; -fx-text-fill: #0066CC;");
             nextDrawingButton.setVisible(false);
             nextDrawingButton.setManaged(false);
             performDrawing();
@@ -438,6 +454,8 @@ public class JavaFXTemplate extends Application {
 
     // main function that runs one drawing
     private void performDrawing() {
+        Font fontStyle = themeManager.getFont(14);
+
         statusLabel.setText("Drawing in progress...");
         drawnNumbersDisplay.getChildren().clear();
 
@@ -446,6 +464,8 @@ public class JavaFXTemplate extends Application {
 
         drawingNumberLabel.setText("Drawing " + gameLogic.getCurrentDrawing() +
                 " of " + gameLogic.getNumDrawings());
+        drawingNumberLabel.setStyle("-fx-font-family: '" + fontStyle.getFamily() + "'; -fx-font-size: 20px;");
+
 
         animateDrawing(drawnNumbers, matches);
     }
@@ -453,6 +473,8 @@ public class JavaFXTemplate extends Application {
     // shows the drawn numbers one at a time with short delay
     private void animateDrawing(ArrayList<Integer> drawnNumbers, ArrayList<Integer> matches) {
         SequentialTransition sequence = new SequentialTransition();
+
+        Font fontStyle = themeManager.getFont(14);
 
         for (int i = 0; i < drawnNumbers.size(); i++) {
             final int index = i;
@@ -471,12 +493,13 @@ public class JavaFXTemplate extends Application {
                         boolean playerPicked = gameLogic.getPlayerNumbers().contains(currentNumber);
                         if(playerPicked){
                             Rectangle greenTint = new Rectangle(60, 60, Color.rgb(76, 175, 80, 0.5));
-//                            Circle greenTint = new Circle(16, Color.rgb(76, 175, 80, 0.75));
                             graphic.getChildren().addAll(greenTint);
                             graphic.setOpacity(0.9);
                         }
                     }
                 }
+
+                matchesLabel.setStyle("-fx-font-family: '" + fontStyle.getFamily() + "'; -fx-font-size: 18px;");
 
                 int count = 0;
                 for (int j = 0; j <= index; j++)
@@ -493,7 +516,7 @@ public class JavaFXTemplate extends Application {
     }
 
     private void animateImage(ImageView object, StackPane root){
-        StackPane.setMargin(object, new Insets(0, 210, 95, 0));
+        StackPane.setMargin(object, new Insets(0, 210, 75, 0));
         StackPane.setAlignment(object, Pos.BOTTOM_RIGHT);
 
         root.getChildren().add(object);
@@ -507,6 +530,8 @@ public class JavaFXTemplate extends Application {
     private void createImageWithNumber(int num, boolean isMatch){
        StackPane stack = new StackPane();
 
+        Font numFont = themeManager.getFont(14);
+
         // Gets Icon Image for PopUp
         String imagePath = "/images/" + themeManager.getAnimationObjectImage();
         Image i = new Image(getClass().getResource(imagePath).toExternalForm());
@@ -516,7 +541,7 @@ public class JavaFXTemplate extends Application {
         objectImageView.setFitWidth(40);
 
         Label number = new Label(String.valueOf(num));
-        number.setStyle("-fx-font-size: 10px; -fx-font-weight: bold;");
+        number.setStyle("-fx-font-family: '" + numFont.getFamily() + "'; -fx-font-size: 14px; -fx-font-weight: bold;");
 
         // Changes tint on top of image if it's a winning number or not
         if(isMatch){
@@ -528,6 +553,13 @@ public class JavaFXTemplate extends Application {
             stack.getChildren().addAll(objectImageView, number, redTint);
         }
 
+        if(themeManager.getBoardImage().equals("Fish.PNG")){
+            StackPane.setMargin(number, new Insets(0, 0, 7, 5));
+        }
+        else{
+            StackPane.setMargin(number, new Insets(0, 0, 0, 5));
+        }
+
         drawnNumbersDisplay.getChildren().add(stack);
 
     }
@@ -536,13 +568,17 @@ public class JavaFXTemplate extends Application {
     private void showDrawingResults(ArrayList<Integer> matches) {
         int matchCount = matches.size();
         int winnings = gameLogic.getCurrentDrawingWinnings();
+        Font fontStyle = themeManager.getFont(14);
 
         currentDrawnNumberLabel.setText("Complete!");
-        currentDrawnNumberLabel.setStyle("-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #0066CC;");
+        currentDrawnNumberLabel.setStyle("-fx-font-family: '" + fontStyle.getFamily() + "'; -fx-font-size: 25px; -fx-font-weight: bold; -fx-text-fill: #0066CC;");
 
         matchesLabel.setText("Matches: " + matchCount + " / " + gameLogic.getPlayerNumbers().size());
+        matchesLabel.setStyle("-fx-font-family: '" + fontStyle.getFamily() + "'; -fx-font-size: 18px;");
         winningsLabel.setText("This Drawing: $" + winnings);
+        winningsLabel.setStyle("-fx-font-family: '" + fontStyle.getFamily() + "'; -fx-font-size: 18px;");
         totalWinningsLabel.setText("Total: $" + gameLogic.getTotalWinnings());
+        totalWinningsLabel.setStyle("-fx-font-family: '" + fontStyle.getFamily() + "'; -fx-font-size: 18px;");
         statusLabel.setText("Drawing complete!");
 
         boolean last = (gameLogic.getCurrentDrawing() >= gameLogic.getNumDrawings());

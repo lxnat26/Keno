@@ -2,6 +2,7 @@ import javafx.scene.Scene;
 import java.util.HashMap;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
 
 public class ThemeManager {
     private String currentTheme;
@@ -24,6 +25,7 @@ public class ThemeManager {
                 "CarrotPng.PNG",
                 "BunnyConveyor.PNG",
                 "CarrotPng.PNG",
+                "GamjaFlower-Regular.ttf"
         });
 
         themes.put("cat", new String[]{
@@ -34,6 +36,7 @@ public class ThemeManager {
                 "FishPng.PNG",
                 "CatConveyor.PNG",
                 "FishPng.PNG",
+                "GamjaFlower-Regular.ttf"
         });
     }
 
@@ -62,6 +65,13 @@ public class ThemeManager {
     public String getAnimationImage(){return themes.get(currentTheme)[5];}
 
     public String getAnimationObjectImage(){return themes.get(currentTheme)[6];}
+
+    public Font getFont(double size){
+        String fontFile = themes.get(currentTheme)[7];
+        String fontPath = "/fonts/" + fontFile;
+
+        return Font.loadFont(getClass().getResourceAsStream(fontPath), size);
+    }
 
     public ImageView getBackgroundImageView(){
         String imageFile = getBackgroundImage();
