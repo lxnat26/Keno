@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 
-public class ThemeManager {
+public class ThemeManager { // anything theme related is found here!
     private String currentTheme;
     private HashMap<String, String[]> themes;
 
@@ -13,12 +13,11 @@ public class ThemeManager {
         initializeThemes();
     }
 
-    private void initializeThemes() {
+    private void initializeThemes() { // defines resources needed for each theme
         themes = new HashMap<>();
 
-        // In ThemeManager.java
         themes.put("bunny", new String[]{
-                "#9BCCB6",     // Changed to match your original
+                "#9BCCB6",
                 "bunnyKeno.PNG",
                 "PinkButton.PNG",
                 "Carrot.PNG",
@@ -29,7 +28,7 @@ public class ThemeManager {
         });
 
         themes.put("cat", new String[]{
-                "#2A638D",     // Changed to match your original
+                "#2A638D",
                 "catKeno.PNG",
                 "OrangeButton.PNG",
                 "Fish.PNG",
@@ -48,6 +47,7 @@ public class ThemeManager {
         }
     }
 
+    // getters and setters
     public String getCurrentTheme() {
         return currentTheme;
     }
@@ -87,12 +87,10 @@ public class ThemeManager {
     }
 
     public ImageView getConveyorImage(){
-        // Gets Conveyor Image Path
         String animationImagePath = "/images/" + getAnimationImage();
         Image animationImage = new Image(getClass().getResource(animationImagePath).toExternalForm());
         ImageView conveyor = new ImageView(animationImage);
 
-        // Sets size of Conveyor Image
         conveyor.setFitHeight(200);
         conveyor.setFitWidth(340);
 
@@ -100,12 +98,10 @@ public class ThemeManager {
     }
 
     public ImageView getObjectImageView(){
-        // Gets Object Image Path
         String imagePath = "/images/" + getAnimationObjectImage();
         Image i = new Image(getClass().getResource(imagePath).toExternalForm());
         ImageView objectImageView = new ImageView(i);
 
-        // Sets up size of Object Image
         objectImageView.setFitHeight(70);
         objectImageView.setFitWidth(70);
 
@@ -114,7 +110,6 @@ public class ThemeManager {
 
     public void applyToScene(Scene scene) {
         String bgColor = getBackgroundColor();
-
         scene.getRoot().setStyle(
                 "-fx-background-color: " + bgColor + ";"
         );

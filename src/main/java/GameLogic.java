@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 
+// the name of the functions kinda speak for themselves LOL
+
 public class GameLogic {
     private int numSpots;
     private int numDrawings;
@@ -23,7 +25,7 @@ public class GameLogic {
     public void setGameSettings(int spots, int drawings) {
         this.numSpots = spots;
         this.numDrawings = drawings;
-        this.currDrawing = 1; // Start at drawing 1
+        this.currDrawing = 1;
     }
 
     public void setPlayerNumbers(ArrayList<Integer> numbers) {

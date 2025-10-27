@@ -33,12 +33,12 @@ public class GameOverPopup implements Popup {
         alert.setHeaderText(null);
         alert.setContentText(getContent());
 
-        // Gets Icon Image for PopUp
+        // gets icon image for popup
         String iconImagePath = "/images/" + themeManager.getPopUpImage();
         Image iconImage = new Image(getClass().getResource(iconImagePath).toExternalForm());
         ImageView iconImageView = new ImageView(iconImage);
 
-        // Sets up Icon and Styles Pop Up
+        // sets up icon
         iconImageView.setFitHeight(50);
         iconImageView.setFitWidth(50);
         alert.setGraphic(iconImageView);
@@ -51,13 +51,13 @@ public class GameOverPopup implements Popup {
 
         Optional<ButtonType> result = alert.showAndWait();
         
-        // Handle button clicks
+        // handle button clicks
         if (result.isPresent()) {
             if (result.get() == playAgain) {
-                // Reset game and stay on game screen
+                // reset game and stay on game screen
                 app.sceneChangeToGame.fire();
             } else if (result.get() == backToMenu) {
-                // Use the existing back to menu button - it has all the logic we need!
+                // use the existing back to menu button
                 app.sceneChangeToMenu.fire();
             } else if(result.get() == exit){
                 primaryStage.close();

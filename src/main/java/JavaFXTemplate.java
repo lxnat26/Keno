@@ -1,7 +1,5 @@
 import javafx.animation.*;
-
 import javafx.application.Application;
-
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -15,41 +13,35 @@ import javafx.scene.control.Separator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
-
 import javafx.stage.Stage;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.util.Duration;
 import java.util.HashMap;
 import java.util.ArrayList;
 
 
 public class JavaFXTemplate extends Application {
-
     ImageView convey;
     ImageView object;
 
-    // buttons to switch between screens
-    Button sceneChangeToGame, sceneChangeToMenu;
+    Button sceneChangeToGame;
+    Button sceneChangeToMenu;
     
-    // store menu and game scenes here
     HashMap<String, Scene> sceneMap;
     
-    // menu bars for both scenes
-    MenuBar menuBarWelcome, menuBarGame;
-    Menu menuWelcome, menuGame;
+    // menu components
+    MenuBar menuBarWelcome;
+    MenuBar menuBarGame;
+    Menu menuWelcome;
+    Menu menuGame;
     
-    // main app window
     Stage primaryStage;
-    
-    // managers for theme, game logic, and board
     ThemeManager themeManager;
     GameLogic gameLogic;
     GameBoard gameBoard;
     
-    // right side controls (user selects stuff here)
+    // right panel controls
     ComboBox<Integer> spotsComboBox;
     ComboBox<Integer> drawingsComboBox;
     Button randomPickButton;
@@ -58,7 +50,6 @@ public class JavaFXTemplate extends Application {
     Button confirmSelectionButton;
     Button nextDrawingButton;
 
-    // group of settings that we hide when game starts
     VBox settingsContainer;
     
     // stuff that shows during drawing animation
@@ -78,15 +69,11 @@ public class JavaFXTemplate extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         primaryStage.setTitle("Keno");
-
-        // lock window size
         primaryStage.setResizable(false);
 
-        // init managers
         themeManager = new ThemeManager();
         gameLogic = new GameLogic();
 
-        // menus for both scenes
         menuWelcome = new Menu("✪ Menu");
         menuGame = new Menu("✪ Menu");
         menuBarWelcome = new MenuBar();
@@ -95,7 +82,7 @@ public class JavaFXTemplate extends Application {
         menuWelcome.setStyle("-fx-font-size: 14px;");
         menuGame.setStyle("-fx-font-size: 14px;");
 
-        // welcome menu options
+        // welcome menu
         MenuItem mW1 = new MenuItem("Rules");
         mW1.setOnAction(e -> showRules());
         MenuItem mW2 = new MenuItem("Odds");
@@ -103,7 +90,7 @@ public class JavaFXTemplate extends Application {
         MenuItem mW3 = new MenuItem("Exit");
         mW3.setOnAction(e -> exitGame());
 
-        // game menu options
+        // game menu
         MenuItem mG1 = new MenuItem("Rules");
         mG1.setOnAction(e -> showRules());
         MenuItem mG2 = new MenuItem("Odds");
@@ -113,7 +100,6 @@ public class JavaFXTemplate extends Application {
         MenuItem mG4 = new MenuItem("Exit");
         mG4.setOnAction(e -> exitGame());
 
-        // add items to menu bars
         menuWelcome.getItems().addAll(mW1, mW2, mW3);
         menuBarWelcome.getMenus().addAll(menuWelcome);
         menuGame.getItems().addAll(mG1, mG2, mG3, mG4);
@@ -130,23 +116,21 @@ public class JavaFXTemplate extends Application {
                 "-fx-text-fill: #6750A4;" +
                 "-fx-font-weight: bold;");
 
-        // map to store all scenes
         sceneMap = new HashMap<>();
 
-        // go to game
+        // navigate to game
         sceneChangeToGame.setOnAction(e -> {
             Scene gameScene = createGameScene();
             sceneMap.put("game", gameScene);
             primaryStage.setScene(sceneMap.get("game"));
         });
 
-        // go back to menu
+        // navigate to menu
         sceneChangeToMenu.setOnAction(e -> {
             sceneMap.put("menu", createMenuScene());
             primaryStage.setScene(sceneMap.get("menu"));
         });
 
-        // build both scenes at startup
         sceneMap.put("menu", createMenuScene());
         sceneMap.put("game", createGameScene());
 
@@ -155,69 +139,53 @@ public class JavaFXTemplate extends Application {
         primaryStage.show();
     }
 
-    // creates welcome screen with play button and bg image
     public Scene createMenuScene() {
-        // Gets the background image (Keno Logo)
         ImageView bgImage = themeManager.getBackgroundImageView();
 
-        // Creates and sets up BorderPane
         BorderPane pane = new BorderPane();
         pane.setPrefSize(1250, 700);
 
-        // Creates and sets up centerBox
         VBox centerBox = new VBox(20);
         centerBox.setPadding(new Insets(10));
         centerBox.setStyle("-fx-alignment:center;");
 
-        // Gets Image for Play Button
+        // play button
         String buttonImagePath = "/images/" + themeManager.getButtonImage();
         Image buttonImage = new Image(getClass().getResource(buttonImagePath).toExternalForm());
         ImageView buttonImageView = new ImageView(buttonImage);
-
-        // Sets Sizing of Play Button Image
         buttonImageView.setFitWidth(180);
         buttonImageView.setFitHeight(60);
-
-        // Sets Image to Button
         sceneChangeToGame.setGraphic(buttonImageView);
         sceneChangeToGame.setStyle("-fx-background-color: transparent;");
 
-        // Sets up layout of play Button
+        // play button layout
         VBox.setMargin(sceneChangeToGame, new Insets(250, 0, 0, 0));
         centerBox.getChildren().addAll(sceneChangeToGame);
 
-        // Sets Up Menu Bar and centerBox on BorderPane
         pane.setTop(menuBarWelcome);
         pane.setCenter(centerBox);
 
-        // Stacks background Image (Keno Logo) to Borderpane
         StackPane root = new StackPane(bgImage, pane);
 
-        // Creates Scene and applies the theme
         Scene scene = new Scene(root, 1250, 700);
         themeManager.applyToScene(scene);
 
         return scene;
     }
 
-    // creates main game screen layout
     public Scene createGameScene() {
-        // Gets animation ImageViews
+        // animation for bunny factory labor
         convey = themeManager.getConveyorImage();
         object = themeManager.getObjectImageView();
 
         StackPane root = new StackPane();
         BorderPane pane = new BorderPane();
-
-        // Sets up BorderPane size and menuBar at top
         pane.setPrefSize(1250, 700);
         pane.setTop(menuBarGame);
-
-        // Adds BorderPane to StackPane and fixes layout of menuBar
         root.getChildren().add(pane);
         BorderPane.setMargin(menuBarGame, new Insets(0, 0, 0, 60));
 
-        // left side: keno number grid
+        // left side aka keno grid
         gameBoard = new GameBoard();
         GridPane grid = gameBoard.createGameBoard(e -> {
             Button btn = (Button) e.getSource();
@@ -238,7 +206,7 @@ public class JavaFXTemplate extends Application {
 
         animateImage(object, root);
 
-        // right side: control panel
+        // right side control settings
         VBox rightPanel = createRightPanel();
 
         VBox rightSide = new VBox(10);
@@ -252,13 +220,12 @@ public class JavaFXTemplate extends Application {
         return scene;
     }
 
-    // builds the right-side controls for spots, drawings, etc.
     private VBox createRightPanel() {
         VBox rightPanel = new VBox(20);
         rightPanel.setPadding(new Insets(40, 175, 0, 50));
         rightPanel.setAlignment(Pos.TOP_CENTER);
 
-        // Font for text
+        // font for text
         Font comboFont = themeManager.getFont(14);
 
         statusLabel = new Label("Select number of spots and drawings");
@@ -274,8 +241,6 @@ public class JavaFXTemplate extends Application {
         spotsComboBox.setPromptText("Choose spots...");
         spotsComboBox.setPrefWidth(150);
         spotsComboBox.setStyle("-fx-font-family: '" + comboFont.getFamily() + "'; -fx-font-size: 16px;");
-
-
 
         Label drawingsLabel = new Label("Number of Drawings:");
         drawingsLabel.setFont(themeManager.getFont(18));
@@ -349,7 +314,7 @@ public class JavaFXTemplate extends Application {
         nextDrawingButton.setVisible(false);
         nextDrawingButton.setManaged(false);
 
-        drawingInfoPanel.getChildren().addAll(
+        drawingInfoPanel.getChildren().addAll( // creates the panel users sees when drawings are done
             drawingNumberLabel,
             new Separator(),
             currentDrawnNumberLabel,
@@ -374,7 +339,6 @@ public class JavaFXTemplate extends Application {
         return rightPanel;
     }
 
-    // connects all the button actions
     private void setupControlHandlers() {
         Font fontStyle = themeManager.getFont(14);
 
@@ -408,9 +372,7 @@ public class JavaFXTemplate extends Application {
             confirmSelectionButton.setDisable(false);
         });
 
-        // confirm button has two roles:
-        // 1. first confirms settings
-        // 2. then locks number selection
+        // confirm button confirms settings + locks selection
         confirmSelectionButton.setOnAction(e -> {
             if (!spotsComboBox.isDisabled()) {
                 int spots = spotsComboBox.getValue();
@@ -452,8 +414,7 @@ public class JavaFXTemplate extends Application {
         });
     }
 
-    // main function that runs one drawing
-    private void performDrawing() {
+    private void performDrawing() { // generates new random chosen numbers for one round
         Font fontStyle = themeManager.getFont(14);
 
         statusLabel.setText("Drawing in progress...");
@@ -462,18 +423,14 @@ public class JavaFXTemplate extends Application {
         ArrayList<Integer> drawnNumbers = gameLogic.performDrawing();
         ArrayList<Integer> matches = gameLogic.getMatchedNumbers();
 
-        drawingNumberLabel.setText("Drawing " + gameLogic.getCurrentDrawing() +
-                " of " + gameLogic.getNumDrawings());
+        drawingNumberLabel.setText("Drawing " + gameLogic.getCurrentDrawing() + " of " + gameLogic.getNumDrawings());
         drawingNumberLabel.setStyle("-fx-font-family: '" + fontStyle.getFamily() + "'; -fx-font-size: 20px;");
-
 
         animateDrawing(drawnNumbers, matches);
     }
 
-    // shows the drawn numbers one at a time with short delay
-    private void animateDrawing(ArrayList<Integer> drawnNumbers, ArrayList<Integer> matches) {
+    private void animateDrawing(ArrayList<Integer> drawnNumbers, ArrayList<Integer> matches) { // makes respective changes on the screen according to the drawn numbers
         SequentialTransition sequence = new SequentialTransition();
-
         Font fontStyle = themeManager.getFont(14);
 
         for (int i = 0; i < drawnNumbers.size(); i++) {
@@ -515,7 +472,7 @@ public class JavaFXTemplate extends Application {
         sequence.play();
     }
 
-    private void animateImage(ImageView object, StackPane root){
+    private void animateImage(ImageView object, StackPane root){ // moves carrot and fish
         StackPane.setMargin(object, new Insets(0, 210, 75, 0));
         StackPane.setAlignment(object, Pos.BOTTOM_RIGHT);
 
@@ -528,11 +485,8 @@ public class JavaFXTemplate extends Application {
     }
 
     private void createImageWithNumber(int num, boolean isMatch){
-       StackPane stack = new StackPane();
-
+        StackPane stack = new StackPane();
         Font numFont = themeManager.getFont(14);
-
-        // Gets Icon Image for PopUp
         String imagePath = "/images/" + themeManager.getAnimationObjectImage();
         Image i = new Image(getClass().getResource(imagePath).toExternalForm());
         ImageView objectImageView = new ImageView(i);
@@ -564,7 +518,6 @@ public class JavaFXTemplate extends Application {
 
     }
 
-    // shows final results after a drawing
     private void showDrawingResults(ArrayList<Integer> matches) {
         int matchCount = matches.size();
         int winnings = gameLogic.getCurrentDrawingWinnings();
@@ -588,7 +541,7 @@ public class JavaFXTemplate extends Application {
             nextDrawingButton.setManaged(true);
         }
     }
-    // resets visuals before next drawing
+
     private void resetBoardForNextDrawing() {
         drawnNumbersDisplay.getChildren().clear();
         currentDrawnNumberLabel.setText("");
@@ -612,7 +565,6 @@ public class JavaFXTemplate extends Application {
         }
     }
 
-    // shows final popup after last drawing is done
     private void showGameOver() {
         javafx.application.Platform.runLater(() -> {
             try {
@@ -624,8 +576,7 @@ public class JavaFXTemplate extends Application {
         });
     }
 
-    // checks if both dropdowns (spots + drawings) are selected
-    private void checkIfSettingsComplete() {
+    private void checkIfSettingsComplete() { // checks if user selcts number spots and number of drawings
         if (spotsComboBox.getValue() != null && drawingsComboBox.getValue() != null) {
             confirmSelectionButton.setDisable(false);
             statusLabel.setText("click 'confirm selection' to lock your settings");
@@ -636,8 +587,7 @@ public class JavaFXTemplate extends Application {
         }
     }
 
-    // checks if player picked enough numbers before confirming
-    private void checkIfReadyToStart() {
+    private void checkIfReadyToStart() { // checks if player picked enough numbers before confirming
         if (spotsComboBox.getValue() == null) return;
 
         int required = spotsComboBox.getValue();
@@ -658,20 +608,17 @@ public class JavaFXTemplate extends Application {
         }
     }
 
-    // opens popup showing keno rules
-    public void showRules() {
+    public void showRules() { // opens popup showing keno rules
         RulesPopup popup = new RulesPopup();
         popup.show(themeManager, primaryStage);
     }
 
-    // opens popup showing keno odds table
-    public void showOdds() {
+    public void showOdds() { // opens popup showing keno odds table
         OddsPopup popup = new OddsPopup();
         popup.show(themeManager, primaryStage);
     }
 
-    // switches between light/dark or fish theme without losing state
-    public void toggleTheme() {
+    public void toggleTheme() { // switches between themes without losing state
         themeManager.toggleTheme();
 
         ImageView newConveyor = themeManager.getConveyorImage();
@@ -706,7 +653,7 @@ public class JavaFXTemplate extends Application {
                     imageView.setImage(newImage);
                 }
 
-                // tweak label position for certain themes
+                // adjusts label position for certain themes
                 for (javafx.scene.Node node : graphic.getChildren()) {
                     if (node instanceof Label) {
                         Label numText = (Label) node;

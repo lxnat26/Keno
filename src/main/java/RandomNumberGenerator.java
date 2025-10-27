@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+// random number generator that ensures no duplicats are chosen
 public class RandomNumberGenerator implements NumberGenerator {
     private Random random;
 

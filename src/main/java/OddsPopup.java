@@ -4,6 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+// all of the code for the content in the odds popup
 public class OddsPopup implements Popup {
 
     @Override
@@ -43,12 +44,10 @@ public class OddsPopup implements Popup {
         alert.setHeaderText(null);
         alert.setContentText(getContent());
 
-        // Gets Icon Image for PopUp
         String iconImagePath = "/images/" + themeManager.getPopUpImage();
         Image iconImage = new Image(getClass().getResource(iconImagePath).toExternalForm());
         ImageView iconImageView = new ImageView(iconImage);
 
-        // Sets up Icon and Styles Pop Up
         iconImageView.setFitHeight(50);
         iconImageView.setFitWidth(50);
         alert.setGraphic(iconImageView);
